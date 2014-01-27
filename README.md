@@ -13,4 +13,5 @@ Place this script in a disk partition with more than 15 Gb free space. Of course
 Then, run 'bash build-script.sh' in a terminal.
 
 Once finished, you will find a working build of Bonita BPM in:
+
 BonitaBPM-build/bonita-studio/all-in-one/target/BonitaBPMCommunity-6.2.1
