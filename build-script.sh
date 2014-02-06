@@ -284,6 +284,11 @@ cd ..
 
 #****BUILD STUDIO - COMMON ACTION ****
 # Prerequisite step for building any of the Studio modules listed below
+
+# You must have a correct target platform, available at http://download.forge.ow2.org/bonita/TargetPlatform-6.1.zip
+wget http://download.forge.ow2.org/bonita/TargetPlatform-6.1.zip
+unzip TargetPlatform-6.1.zip
+
 # You might need to increase max perm size of maven
 export MAVEN_OPTS="-XX:MaxPermSize=256m"
 git clone https://github.com/bonitasoft/bonita-studio.git
@@ -303,11 +308,8 @@ cd ..
 
 #**** GENERATE STUDIO MODELS SOURCES ****
 cd  bundles/plugins/org.bonitasoft.studio-models/
-# You must have a correct target platform, available at http://download.forge.ow2.org/bonita/TargetPlatform-6.1.zip
-wget http://download.forge.ow2.org/bonita/TargetPlatform-6.1.zip
-unzip TargetPlatform-6.1.zip
 # Replace '6.1.0' by the tag you want to build
-mvn clean initialize -Pgenerate -Dp2MirrorUrl=6.1/repository/
+mvn clean initialize -Pgenerate -Dp2MirrorUrl=../../../../6.1/repository/
 cd ../../..
 
 #**** BUILD STUDIO BUNDLES MODULE ****
