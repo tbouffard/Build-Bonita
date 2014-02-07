@@ -288,6 +288,7 @@ cd ..
 # You must have a correct target platform, available at http://download.forge.ow2.org/bonita/TargetPlatform-6.1.zip
 wget http://download.forge.ow2.org/bonita/TargetPlatform-6.1.zip
 unzip TargetPlatform-6.1.zip
+DIR=`pwd`
 
 # You might need to increase max perm size of maven
 export MAVEN_OPTS="-XX:MaxPermSize=256m"
@@ -298,7 +299,7 @@ git checkout bos-studio-6.2.1-201401090931
 
 #**** BUILD STUDIO PLATFORM MODULE ****
 cd  platform
-mvn clean install -Pmirrored
+mvn clean install -Pmirrored -Dp2MirrorUrl=file://$DIR/6.1/
 cd ..
 
 #**** BUILD STUDIO PATCHED PLUGINS MODULE ****
@@ -309,7 +310,7 @@ cd ..
 #**** GENERATE STUDIO MODELS SOURCES ****
 cd  bundles/plugins/org.bonitasoft.studio-models/
 # Replace '6.1.0' by the tag you want to build
-mvn clean initialize -Pgenerate -Dp2MirrorUrl=../../../../6.1/repository/
+mvn clean initialize -Pgenerate -Dp2MirrorUrl=file://$DIR/6.1/
 cd ../../..
 
 #**** BUILD STUDIO BUNDLES MODULE ****
@@ -339,4 +340,3 @@ echo ''
 echo '---------------------------'
 echo ''
 #end
-
