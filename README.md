@@ -15,3 +15,8 @@ Then, run 'bash build-script.sh' in a terminal.
 Once finished, you will find a working build of Bonita BPM in:
 
 BonitaBPM-build/bonita-studio/all-in-one/target/BonitaBPMCommunity-6.2.1
+
+Support
+-------
+
+This script is not designed to work on an other platform than Linux. You are of course free to fork it for Windows or Mac. However, no support will be done.
