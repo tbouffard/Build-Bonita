@@ -23,8 +23,8 @@ do
 done
 
 #Create folder for files
-mkdir BonitaBPM-build-6-2-3
-cd BonitaBPM-build-6-2-3
+mkdir BonitaBPM-build-6-2-1
+cd BonitaBPM-build-6-2-1
 
 # jms.jar Needed at least for Bonita Engine
 wget http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip
@@ -43,7 +43,7 @@ cd ..
 git clone https://github.com/bonitasoft/bonita-engine.git
 cd bonita-engine
 # Replace '6.1.0' by the tag you want to build
-git checkout 6.2.3
+git checkout 6.2.1
 mvn clean install -DskipTests=true -P package
 git checkout 6.1.0
 mvn clean install -DskipTests=true -P package
@@ -53,7 +53,7 @@ cd ..
 git clone https://github.com/bonitasoft/bonita-userfilters.git
 cd bonita-userfilters
 # Replace '6.1.0' by the tag you want to build
-git checkout 6.2.3
+git checkout 6.2.1
 mvn clean install -DskipTests
 cd ..
 
@@ -268,9 +268,9 @@ cd ..
 git clone https://github.com/bonitasoft/bonita-web.git
 cd bonita-web
 # Replace '6.1.0' by the tag you want to build
-git checkout 6.2.3
-# sed '244s/<repository>/<!-- <repository>/' -i pom.xml
-# sed '257s/<\/repository>/<\/repository> -->/' -i pom.xml
+git checkout 6.2.1
+sed '244s/<repository>/<!-- <repository>/' -i pom.xml
+sed '257s/<\/repository>/<\/repository> -->/' -i pom.xml
 mvn clean install -DskipTests
 cd ..
 
@@ -278,7 +278,7 @@ cd ..
 git clone https://github.com/bonitasoft/bonita-distrib.git
 cd  bonita-distrib
 # Replace '6.1.0' by the tag you want to build
-git checkout 6.2.3
+git checkout 6.2.1
 mvn clean install -DskipTests
 cd ..
 
@@ -295,7 +295,7 @@ export MAVEN_OPTS="-XX:MaxPermSize=256m"
 git clone https://github.com/bonitasoft/bonita-studio.git
 cd bonita-studio
 # Replace '6.1.0' by the tag you want to build
-git checkout bos-studio-6.2.3
+git checkout bos-studio-6.2.1-201401090931
 
 #**** BUILD STUDIO PLATFORM MODULE ****
 cd  platform
