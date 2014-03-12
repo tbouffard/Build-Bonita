@@ -23,8 +23,8 @@ do
 done
 
 #Create folder for files
-mkdir BonitaBPM-build
-cd BonitaBPM-build
+mkdir BonitaBPM-build-6-2-1
+cd BonitaBPM-build-6-2-1
 
 # jms.jar Needed at least for Bonita Engine
 wget http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip
