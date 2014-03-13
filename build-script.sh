@@ -6,7 +6,7 @@
 #start
 
 #test that java, git and maven are installed
-for req in git java mvn
+for req in git java mvn unzip
 do
         which $req
         if [ $? -eq 0 ]
