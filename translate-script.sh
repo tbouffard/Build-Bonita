@@ -32,7 +32,10 @@ cp translations/6.2.x/bonita-web/portal/* bonita-web/console/console-config/src/
 cp translations/6.2.x/bonita-web/forms-view/* bonita-web/forms/forms-view/src/main/resources/org/bonitasoft/forms/client/i18n/
 cp translations/6.2.x/bonita-web/form-server/* bonita-web/forms/forms-server/src/main/resources/locale/i18n/
 
-#Replace FormsView.gwt.xml with the list of all languages
+Replace FormsView.gwt.xml with the list of all languages
+cd translations/6.2.x/
+wget https://github.com/Bonitasoft-Community/Build-Bonita-BPM/raw/master/6.2.x/FormsView.gwt.xml
+cd ../..
 cp translations/6.2.x/FormsView.gwt.xml bonita-web/forms/forms-view/src/main/java/org/bonitasoft/forms/
 
 #Now that translations are available in the sources, we will build Platform
