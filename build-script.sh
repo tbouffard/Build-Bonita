@@ -2,10 +2,6 @@
 
 #Script to build Bonita BPM from GitHub sources
 # sudo apt-get install maven openjdk-7-jdk icedtea-7-jre-jamvm
-#reste à faire:
-# ajouter la gestion des erreurs
-# tester que ça marche en partant de rien, donc en ré-initialisant maven
-# ajouter les langues depuis Crowdin pour builder avec les dernières traductions
 
 #start
 
