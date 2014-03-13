@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+	<!-- Inherit the core Web Toolkit stuff.                        -->
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	
+	<inherits name='org.bonitasoft.web.rest.RestModel' />
+	
+	
+<!-- Bonita BPM Community Edition, official languages -->
+	<!-- French language, independent of country					-->
+	<extend-property name="locale" values="fr"/>
+	
+	<!-- Spanish language, independent of country					-->
+	<extend-property name="locale" values="es"/>
+	
+	<!-- German language, independent of country					-->
+	<extend-property name="locale" values="de"/>
+	
+	<!-- Portuguese language in Brazil						
+	<extend-property name="locale" values="pt_BR"/>-->
+	
+	<!-- Italian language, independent of country					-->
+	<extend-property name="locale" values="it"/>
+	
+<!-- Bonita BPM Community Edition, translations by Community -->
+	
+	<!-- Arabic language, in Saudi Arabia				
+	<extend-property name="locale" values="ar_SA"/>-->
+	
+	<!-- Czech language, in Czech Republic				
+	<extend-property name="locale" values="cs_CZ"/>-->
+	
+	<!-- German language, in Germany				
+	<extend-property name="locale" values="de_DE"/>-->
+	
+	<!-- Greek language, in Greece					
+	<extend-property name="locale" values="el_GR"/>-->
+	
+	<!-- English language, in United States of America		
+	<extend-property name="locale" values="en_US"/>-->
+	
+	<!-- Spanish language, in Spain					
+	<extend-property name="locale" values="es_ES"/>-->
+	
+	<!-- Spanish language, in Spain					
+	<extend-property name="locale" values="es_ES"/>-->
+	
+	<!-- Persian language, in Iran					
+	<extend-property name="locale" values="fa_IR"/>-->
+	
+	<!-- Finnish language, in Finland				
+	<extend-property name="locale" values="fi_FI"/>-->
+	
+	<!-- French language, in France					
+	<extend-property name="locale" values="fr_FR"/>-->
+	
+	<!-- Italian language, in Italy					
+	<extend-property name="locale" values="it_IT"/>-->
+	
+	<!-- Japanese language, in Japan				
+	<extend-property name="locale" values="ja_JP"/>-->
+	
+	<!-- Lithuanian language, in Lithuany				
+	<extend-property name="locale" values="lt_LT"/>-->
+	
+	<!-- Norwegian Bokmål language, in Norway			
+	<extend-property name="locale" values="nb_NO"/>-->
+	
+	<!-- Dutch Bokmål language, in Netherlands			
+	<extend-property name="locale" values="nl_NL"/>-->
+	
+	<!-- Polish Bokmål language, in Poland				
+	<extend-property name="locale" values="pl_PL"/>-->
+	
+	<!-- Portuguese language, in Brazil				-->
+	<extend-property name="locale" values="pt_BR"/>
+	
+	<!-- Portuguese language, in Portugal				
+	<extend-property name="locale" values="pt_PT"/>-->
+	
+	<!-- Russian language, in Russia				-->
+	<extend-property name="locale" values="ru_RU"/>
+	
+	<!-- Slovak language, in Slovakia				
+	<extend-property name="locale" values="sk_SK"/>-->
+	
+	<!-- Turkish language, in Turkey				
+	<extend-property name="locale" values="tr_TR"/>-->
+	
+	<!-- Ukrainian language, in Ukraine				
+	<extend-property name="locale" values="uk_UA"/>-->
+	
+	<!-- Vietnamese language, in Vietnam				-->
+	<extend-property name="locale" values="vi_VI"/>
+	
+	<!-- Chinese language, in China					
+	<extend-property name="locale" values="zh_CN"/>-->
+	
+	<!-- Chinese language, in Taiwan				
+	<extend-property name="locale" values="zh_TW"/>-->
+	
+	
+	<!-- Source path of the module                                  -->
+	<source path="client" />
+	
+	<!-- Servlets for RPC calls                                     -->
+ 	<servlet path="/formsService" class="org.bonitasoft.forms.server.FormsServlet" />
+</module>
