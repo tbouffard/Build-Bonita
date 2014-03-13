@@ -199,13 +199,14 @@ git clone https://github.com/bonitasoft/bonita-connector-twitter.git
 cd bonita-connector-twitter
 # Replace 'master' by the tag 
 # you want to build
-git checkout development
-sed -i "s/6.1.0-SNAPSHOT/6.1.0/g" pom.xml
-sed -i "s/6.1.0-SNAPSHOT/6.1.0/g" bonita-connector-twitter-common/pom.xml
-sed -i "s/6.1.0-SNAPSHOT/6.1.0/g" bonita-connector-twitter-direct-def/pom.xml
-sed -i "s/6.1.0-SNAPSHOT/6.1.0/g" bonita-connector-twitter-direct-impl/pom.xml
-sed -i "s/6.1.0-SNAPSHOT/6.1.0/g" bonita-connector-twitter-update-def/pom.xml
-sed -i "s/6.1.0-SNAPSHOT/6.1.0/g" bonita-connector-twitter-update-impl/pom.xml
+git checkout bonita-connector-twitter-6.1.0-rc-20
+sed -i "s/6.1.0-rc-06/6.1.0/g" pom.xml
+sed -i "s/6.1.0-rc-20/6.1.0/g" pom.xml
+sed -i "s/6.1.0-rc-20/6.1.0/g" bonita-connector-twitter-common/pom.xml
+sed -i "s/6.1.0-rc-20/6.1.0/g" bonita-connector-twitter-direct-def/pom.xml
+sed -i "s/6.1.0-rc-20/6.1.0/g" bonita-connector-twitter-direct-impl/pom.xml
+sed -i "s/6.1.0-rc-20/6.1.0/g" bonita-connector-twitter-update-def/pom.xml
+sed -i "s/6.1.0-rc-20/6.1.0/g" bonita-connector-twitter-update-impl/pom.xml
 mvn clean install -DskipTests
 cd ..
 
@@ -269,8 +270,8 @@ git clone https://github.com/bonitasoft/bonita-web.git
 cd bonita-web
 # Replace '6.1.0' by the tag you want to build
 git checkout 6.2.3
-# sed '244s/<repository>/<!-- <repository>/' -i pom.xml
-# sed '257s/<\/repository>/<\/repository> -->/' -i pom.xml
+sed '249s/<repository>/<!-- <repository>/' -i pom.xml
+sed '262s/<\/repository>/<\/repository> -->/' -i pom.xml
 mvn clean install -DskipTests
 cd ..
 
@@ -295,7 +296,7 @@ export MAVEN_OPTS="-XX:MaxPermSize=256m"
 git clone https://github.com/bonitasoft/bonita-studio.git
 cd bonita-studio
 # Replace '6.1.0' by the tag you want to build
-git checkout bos-studio-6.2.3
+git checkout bos-studio-6.2.3-201403041305
 
 #**** BUILD STUDIO PLATFORM MODULE ****
 cd  platform
