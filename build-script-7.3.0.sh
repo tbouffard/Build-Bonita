@@ -217,6 +217,10 @@ git clone --branch image-overlay-plugin-1.0.1 --single-branch https://github.com
 mvn clean install -Dmaven.test.skip=true -f image-overlay-plugin/pom.xml
 
 git clone --branch bos-studio-7.3.0-201607081120 --single-branch https://github.com/bonitasoft/bonita-studio.git
+# FIXME find a solution to avoid depency on SAP connector
+rm bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/src/org/bonitasoft/studio/importer/bar/custom/migration/connector/mapper/SapConnectorMapper.java
+printf "You need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml line 423 to remove bonita-connector-sap-jco2-impl dependency.\nYou need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/plugin.xml line 71 to remove SAP connector definition mapper.\nPress any key to continue..."
+read -n 1
 mvn clean install -Dmaven.test.skip=true -f bonita-studio/platform/pom.xml -Pmirrored -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
 mvn clean install -Dmaven.test.skip=true -f bonita-studio/patched-plugins/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-studio/tests-dependencies/pom.xml
