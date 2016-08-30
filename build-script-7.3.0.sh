@@ -90,23 +90,29 @@ mvn clean install -Dmaven.test.skip=true -f bonita-connectors/pom.xml
 
 #FIXME: Studio depend on a mix of Alfresco connector version. Both 1.1.3 and 1.1.4 are required so 2 differents tags need to be build.
 git clone --branch bonita-connector-alfresco-1.1.3 --single-branch https://github.com/bonitasoft/bonita-connector-alfresco.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-alfresco/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-alfresco/pom.xml
 rm -rf bonita-connector-alfresco
 git clone --branch 1.1.4 --single-branch https://github.com/bonitasoft/bonita-connector-alfresco.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-alfresco/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-alfresco/pom.xml
 
 git clone --branch 2.0.1 --single-branch https://github.com/bonitasoft/bonita-connector-cmis.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-cmis/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-cmis/pom.xml
 
 git clone --branch bonita-connector-database-datasource-1.0.12 --single-branch https://github.com/bonitasoft/bonita-connector-database.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-database/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-database/pom.xml
 
 git clone --branch bonita-connector-email-impl-1.0.14 --single-branch https://github.com/bonitasoft/bonita-connector-email.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-email/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-email/pom.xml
 
 #FIXME: old version of the connector should be removed as old Google API can not be used anymore.
 # Workaround: install missing Google Calendar library in local Maven repository.
 git clone --branch bonita-connector-googlecalendar-2.0.0 --single-branch https://github.com/bonitasoft/bonita-connector-googlecalendar.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-googlecalendar/pom.xml
 wget -N -P /tmp/ http://storage.googleapis.com/gdata-java-client-binaries/gdata-src.java-1.47.1.zip
 unzip -o -j /tmp/gdata-src.java-1.47.1.zip gdata/java/lib/gdata-calendar-2.0.jar gdata/java/lib/gdata-core-1.0.jar gdata/java/lib/gdata-client-1.0.jar -d /tmp/
 mvn install:install-file -DgeneratePom=true -DgroupId=com.google.gdata -DartifactId=gdata-core -Dpackaging=jar -Dfile=/tmp/gdata-core-1.0.jar -Dversion=1.0
@@ -117,23 +123,29 @@ mvn install:install-file -DgeneratePom=true -DgroupId=com.google.common -Dartifa
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-googlecalendar/pom.xml
 
 git clone --branch bonita-connector-google-calendar-v3-1.0.0 --single-branch https://github.com/bonitasoft/bonita-connector-googlecalendar-V3.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-googlecalendar-V3/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-googlecalendar-V3/pom.xml
 
 #FIXME: issue with bonita-connector-jasper tag 1.0.4: bonita-connector-jasper project version is 1.0.1 whereas bonita-connector-jasper-def and bonita-connector-jasper-impl define there parent has beeing in version 1.0.0. Workaround is to build tag 1.0.0 that provide bonita-connector-jasper in version 1.0.0.
 git clone --branch bonita-connector-jasper-1.0.0 --single-branch https://github.com/bonitasoft/bonita-connector-jasper.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-jasper/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-jasper/pom.xml
 rm -rf bonita-connector-jasper
 git clone --branch bonita-connector-jasper-1.0.4 --single-branch https://github.com/bonitasoft/bonita-connector-jasper.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-jasper/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-jasper/pom.xml
 
 #FIXME: same as bonita-connector-jasper
 git clone --branch bonita-connector-ldap-1.0.0 --single-branch https://github.com/bonitasoft/bonita-connector-ldap.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-ldap/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-ldap/pom.xml
 rm -rf bonita-connector-ldap
 git clone --branch bonita-connector-ldap-1.0.1 --single-branch https://github.com/bonitasoft/bonita-connector-ldap.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-ldap/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-ldap/pom.xml
 
 git clone --branch 1.0.14 --single-branch https://github.com/bonitasoft/bonita-connector-salesforce.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-salesforce/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-salesforce/pom.xml
 
 #TODO: could not compile without SAP proprietary jar file
@@ -141,18 +153,23 @@ mvn clean install -Dmaven.test.skip=true -f bonita-connector-salesforce/pom.xml
 #mvn clean install -Dmaven.test.skip=true -f bonita-connector-sap/pom.xml
 
 git clone --branch bonita-connector-scripting-20151015 --single-branch https://github.com/bonitasoft/bonita-connector-scripting.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-scripting/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-scripting/pom.xml
 
 git clone --branch delete-several-1.0.3 --single-branch https://github.com/bonitasoft/bonita-connector-sugarcrm.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-sugarcrm/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-sugarcrm/pom.xml
 
 git clone --branch update-joblauncher-impl-1.0.3 --single-branch https://github.com/bonitasoft/bonita-connector-talend.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-talend/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-talend/pom.xml
 
 git clone --branch 1.1.0-pomfixed --single-branch https://github.com/bonitasoft/bonita-connector-twitter.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-twitter/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-twitter/pom.xml
 
 git clone --branch 1.0.13 --single-branch https://github.com/bonitasoft/bonita-connector-webservice.git
+sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-webservice/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-webservice/pom.xml
 
 # FIXME: csv4j is not available in a public repository.
