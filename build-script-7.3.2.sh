@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita BPM version
-BONITA_BPM_VERSION=7.3.0
+BONITA_BPM_VERSION=7.3.2
 
 # Check that Maven 3.3.9 is available
 MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
@@ -53,25 +53,22 @@ fi
 # bonita-web-devtools
 # bonita-examples
 
-
-# https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml
-
-# Version defined in https://github.com/bonitasoft/bonita-distrib/blob/7.3.0/deploy/distrib/pom.xml
+# Version defined in https://github.com/bonitasoft/bonita-distrib/blob/$BONITA_BPM_VERSION/deploy/distrib/pom.xml
 git clone --branch 1.1.0 --single-branch https://github.com/bonitasoft/bonita-jboss-h2-mbean.git
 mvn clean install -Dmaven.test.skip=true -f bonita-jboss-h2-mbean/pom.xml
 
-# Version defined in https://github.com/bonitasoft/bonita-distrib/blob/7.3.0/deploy/distrib/pom.xml
+# Version defined in https://github.com/bonitasoft/bonita-distrib/blob/$BONITA_BPM_VERSION/deploy/distrib/pom.xml
 git clone --branch bonita-tomcat-h2-listener-1.0.1 --single-branch https://github.com/bonitasoft/bonita-tomcat-h2-listener.git
 mvn clean install -Dmaven.test.skip=true -f bonita-tomcat-h2-listener/pom.xml
 
-# Version defined in https://github.com/bonitasoft/bonita-distrib/blob/7.3.0/pom.xml
+# Version defined in https://github.com/bonitasoft/bonita-distrib/blob/$BONITA_BPM_VERSION/pom.xml
 git clone --branch 7.0.55 --single-branch https://github.com/bonitasoft/bonita-tomcat-valve.git
 mvn clean install -Dmaven.test.skip=true -f bonita-tomcat-valve/pom.xml
 
 # Note: We need to get bonita-engine repository content in order to build bonita-platform.
 # Note: Checkout folder of bonita-engine project need to be named community.
-git clone --branch 7.3.0 --single-branch https://github.com/bonitasoft/bonita-engine.git community
-git clone --branch 7.3.0 --single-branch https://github.com/bonitasoft/bonita-platform.git
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-engine.git community
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-platform.git
 mvn clean install -Dmaven.test.skip=true -f bonita-platform/pom.xml
 
 # FIXME: There is currently an issue with dependency management so compiling the test is requiered.
@@ -79,14 +76,14 @@ mvn clean install -Dmaven.test.skip=true -f bonita-platform/pom.xml
 MAVEN_BUILD_ENGINE="$MAVEN_3_0_5_PATH clean install -DskipTests -f community/pom.xml"
 eval "$MAVEN_BUILD_ENGINE"
 
-git clone --branch 7.3.0 --single-branch https://github.com/bonitasoft/bonita-userfilters.git
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-userfilters.git
 mvn clean install -Dmaven.test.skip=true -f bonita-userfilters/pom.xml
 
 # Version defined in each connectors pom.xml (see below) as this artifact is the parent of each connectors
 git clone --branch bonita-connectors-1.0.0 --single-branch https://github.com/bonitasoft/bonita-connectors.git
 mvn clean install -Dmaven.test.skip=true -f bonita-connectors/pom.xml
 
-# Each connectors implementation version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml. You need to find connector git repository tag that provides a given connector implementation version.
+# Each connectors implementation version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml. You need to find connector git repository tag that provides a given connector implementation version.
 
 #FIXME: Studio depend on a mix of Alfresco connector version. Both 1.1.3 and 1.1.4 are required so 2 differents tags need to be build.
 git clone --branch bonita-connector-alfresco-1.1.3 --single-branch https://github.com/bonitasoft/bonita-connector-alfresco.git
@@ -105,7 +102,7 @@ git clone --branch bonita-connector-database-datasource-1.0.12 --single-branch h
 sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-database/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-database/pom.xml
 
-git clone --branch bonita-connector-email-impl-1.0.14 --single-branch https://github.com/bonitasoft/bonita-connector-email.git
+git clone --branch bonita-connector-email-impl-1.0.15 --single-branch https://github.com/bonitasoft/bonita-connector-email.git
 sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.version>7.3.0<\/bonita.engine.version>/g" bonita-connector-email/pom.xml
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-email/pom.xml
 
@@ -173,21 +170,21 @@ sed -i "s/<bonita.engine.version>.*<\/bonita.engine.version>/<bonita.engine.vers
 mvn clean install -Dmaven.test.skip=true -f bonita-connector-webservice/pom.xml
 
 # FIXME: csv4j is not available in a public repository.
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/pom.xml.
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
 wget -N -P /tmp/ http://csvobjectmapper.sourceforge.net/maven2/net/sf/csv4j/0.4.0/csv4j-0.4.0.jar
 mvn install:install-file -Dfile=/tmp/csv4j-0.4.0.jar -DgroupId=net.sf.csv4j -DartifactId=csv4j -Dversion=0.4.0 -Dpackaging=jar -DgeneratePom=true
 git clone --branch bos-simulation-6.1.0 --single-branch https://github.com/bonitasoft/bonita-simulation.git
 mvn clean install -Dmaven.test.skip=true -f bonita-simulation/pom.xml
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/pom.xml.
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
 git clone --branch 1.1.0 --single-branch https://github.com/bonitasoft/bonita-theme-builder.git
 mvn clean install -Dmaven.test.skip=true -f bonita-theme-builder/pom.xml
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/pom.xml.
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
 git clone --branch studio-watchdog-7.2.0 --single-branch https://github.com/bonitasoft/bonita-studio-watchdog.git
 mvn clean install -Dmaven.test.skip=true -f bonita-studio-watchdog/pom.xml
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/bundles/plugins/org.bonitasoft.studio.dependencies/src-test/resources/tomcat/webapps/bonita/META-INF/maven/org.bonitasoft.console/console-war-sp/pom.xml has beeing the same one as gwt.version defined in
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/bundles/plugins/org.bonitasoft.studio.dependencies/src-test/resources/tomcat/webapps/bonita/META-INF/maven/org.bonitasoft.console/console-war-sp/pom.xml has beeing the same one as gwt.version defined in
 git clone --branch gwt-tools-2.5.0-20130521 --single-branch https://github.com/bonitasoft/bonita-gwt-tools.git
 mvn clean install -Dmaven.test.skip=true -f bonita-gwt-tools/pom.xml
 
@@ -198,25 +195,25 @@ mvn clean install -Dmaven.test.skip=true -f bonita-gwt-tools/pom.xml
 #mvn clean install -Dmaven.test.skip=true -f bonita-js-components/pom.xml
 
 # FIXME: need to add extra Maven repository to get Restlet dependencies.
-git clone --branch 7.3.0 --single-branch https://github.com/bonitasoft/bonita-web.git
-sed -i "350i <repository><id>maven-restlet</id><name>Public online Restlet repository</name><url>http://maven.restlet.com</url></repository>" bonita-web/pom.xml
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-web.git
+sed -i "349i <repository><id>maven-restlet</id><name>Public online Restlet repository</name><url>http://maven.restlet.com</url></repository>" bonita-web/pom.xml
 mvn clean install -DskipTests -f bonita-web/pom.xml
 
-git clone --branch 7.3.0 --single-branch https://github.com/bonitasoft/bonita-portal-js.git
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-portal-js.git
 mvn clean install -Dmaven.test.skip=true -f bonita-portal-js/pom.xml
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/pom.xml
-git clone --branch 1.3.12 --single-branch https://github.com/bonitasoft/bonita-ui-designer.git
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
+git clone --branch 1.3.18 --single-branch https://github.com/bonitasoft/bonita-ui-designer.git
 mvn clean install -DskipTests -f bonita-ui-designer/pom.xml
 
-git clone --branch 7.3.0 --single-branch https://github.com/bonitasoft/bonita-distrib.git
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-distrib.git
 mvn clean install -DskipTests -Djboss.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -f bonita-distrib/pom.xml
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/bos-studio-7.3.0-201607081120/pom.xml
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
 git clone --branch image-overlay-plugin-1.0.1 --single-branch https://github.com/bonitasoft/image-overlay-plugin.git
 mvn clean install -Dmaven.test.skip=true -f image-overlay-plugin/pom.xml
 
-git clone --branch bos-studio-7.3.0-201607081120 --single-branch https://github.com/bonitasoft/bonita-studio.git
+git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-studio.git
 # FIXME find a solution to avoid depency on SAP connector
 rm bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/src/org/bonitasoft/studio/importer/bar/custom/migration/connector/mapper/SapConnectorMapper.java
 printf "You need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml line 423 to remove bonita-connector-sap-jco2-impl dependency.\nYou need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/plugin.xml line 71 to remove SAP connector definition mapper.\nPress any key to continue..."
