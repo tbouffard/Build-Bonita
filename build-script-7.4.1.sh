@@ -22,38 +22,40 @@ fi
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build:
 #
-# bonita-doc
-# bonita-developer-resources
 # angular-strap
-# bonita-web-extensions
-# bonita-migration-plugins
-# bonita-migration
-# restlet-framework-java
 # babel-preset-bonita
-# training-presentation-tool
-# bonita-platform-setup
-# widget-builder
-# ngUpload
-# dojo
-# jscs-preset-bonita
-# bonita-custom-page-seed
-# sandbox
-# tomcat-atomikos
+# bonita-connector-drools
 # bonita-connector-mongodb
-# tomcat-narayana
 # bonita-connectors-assembly
 # bonita-connectors-packaging
-# bonita-web-devtools
+# bonita-custom-page-seed
+# bonita-doc
+# bonita-developer-resources
 # bonita-examples
 # bonita-jboss-h2-mbean
-# bonita-tomcat-h2-listener
+# bonita-js-components (build by UI Designer using Bower)
+# bonita-migration
+# bonita-migration-plugins
+# bonita-platform
+# bonita-platform-setup
 # bonita-simulation
+# bonita-tomcat-h2-listener
 # bonita-tomcat-valve
-# bonita-js-components: build by UI Designer using Bower.
+# bonita-web-devtools
+# bonita-web-extensions
+# dojo
+# jscs-preset-bonita
+# ngUpload
+# restlet-framework-java
+# sandbox
+# tomcat-atomikos
+# tomcat-narayana
+# training-presentation-tool
+# widget-builder
 
 
 # Note: Checkout folder of bonita-engine project need to be named community.
-# FIXME: There is currently an issue with dependency management so compiling the test is requiered.
+# FIXME: allow to skip test build. Currently test build generate bonita-server-test-utils required by bonita-web.
 git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-engine.git community
 mvn clean install -DskipTests -f community/pom.xml
 
@@ -126,7 +128,7 @@ git clone --branch 1.1.0-pomfixed --single-branch https://github.com/bonitasoft/
 mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VERSION -f bonita-connector-twitter/pom.xml
 
 git clone --branch 1.0.13 --single-branch https://github.com/bonitasoft/bonita-connector-webservice.git
-mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VERSION -Dbonita.engine.version=$BONITA_BPM_VERSION -f bonita-connector-webservice/pom.xml
+mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VERSION -f bonita-connector-webservice/pom.xml
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
 git clone --branch 1.1.0 --single-branch https://github.com/bonitasoft/bonita-theme-builder.git
@@ -140,6 +142,7 @@ mvn clean install -Dmaven.test.skip=true -f bonita-studio-watchdog/pom.xml
 git clone --branch gwt-tools-2.5.0-20130521 --single-branch https://github.com/bonitasoft/bonita-gwt-tools.git
 mvn clean install -Dmaven.test.skip=true -f bonita-gwt-tools/pom.xml
 
+# FIXME: allow to skip compilation of test. Currently building console-server requires console-common tests jar.
 git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-web.git
 mvn clean install -DskipTests -f bonita-web/pom.xml
 
@@ -147,25 +150,20 @@ git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonita
 mvn clean install -Dmaven.test.skip=true -f bonita-portal-js/pom.xml
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
+# FIXME: allow to skip compilation of test. Currently 'npm run test' is executed even if -Dmaven.test.skip=true option is provided.
 git clone --branch 1.4.26 --single-branch https://github.com/bonitasoft/bonita-ui-designer.git
 mvn clean install -DskipTests -f bonita-ui-designer/pom.xml
 
 git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-distrib.git
-mvn clean install -DskipTests -Dwildfly.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -f bonita-distrib/pom.xml
+mvn clean install -Dmaven.test.skip=true -Dwildfly.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -f bonita-distrib/pom.xml
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
 git clone --branch image-overlay-plugin-1.0.2 --single-branch https://github.com/bonitasoft/image-overlay-plugin.git
 mvn clean install -Dmaven.test.skip=true -f image-overlay-plugin/pom.xml
 
 git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-studio.git
-# FIXME find a solution to avoid depency on SAP connector
+# FIXME find a solution to avoid dependency on SAP connector
 rm bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/src/org/bonitasoft/studio/importer/bar/custom/migration/connector/mapper/SapConnectorMapper.java
 printf "You need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml line 331 to remove bonita-connector-sap-jco2-impl dependency.\nYou need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/plugin.xml line 71 to remove SAP connector definition mapper.\nPress any key to continue..."
 read -n 1
-mvn clean install -Dmaven.test.skip=true -f bonita-studio/platform/pom.xml -Pmirrored -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
-mvn clean install -Dmaven.test.skip=true -f bonita-studio/patched-plugins/pom.xml
-mvn clean install -Dmaven.test.skip=true -f bonita-studio/tests-dependencies/pom.xml
-mvn clean tycho-eclipserun:eclipse-run -Dtycho.mode=maven -Dmaven.test.skip=true -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2 -Pgenerate -f bonita-studio/bundles/plugins/org.bonitasoft.studio-models/pom.xml
-mvn clean install -Dmaven.test.skip=true -f bonita-studio/bundles/pom.xml -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
-#mvn clean install -Dmaven.test.skip=true -f bonita-studio/translations/pom.xml -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
-mvn clean install -Dmaven.test.skip=true -f bonita-studio/all-in-one/pom.xml -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
+mvn clean verify -Dmaven.test.skip=true -f bonita-studio/pom.xml -Pmirrored,generate -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
