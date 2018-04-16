@@ -1,7 +1,7 @@
-Build-Bonita-BPM
+Build Bonita from sources
 ================
 
-The script to build Bonita BPM Engine, Portal and Studio from official sources
+The script to build Bonita Engine, Portal and Studio from official sources
 ------------------------------------------------------------------------------
 
 This script has been tested on Debian GNU/Linux Jessie, with Oracle JDK 8, Maven 3.3.9.
