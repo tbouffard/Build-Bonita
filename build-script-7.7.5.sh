@@ -6,7 +6,7 @@ set -e
 # Bonita version
 BONITA_BPM_VERSION=7.7.5
 
-# Test that Mavene exists
+# Test that Maven exists
 if hash mvn 2>/dev/null; then
   MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
   echo Using Maven version: "$MAVEN_VERSION"
@@ -14,6 +14,15 @@ else
   echo Maven not found. Exiting.
   exit 1
 fi
+
+if hash curl 2>/dev/null; then
+  CURL_VERSION="$(curl --version 2>&1  | awk -F " " 'NR==1 {print $2}')"
+  echo Using curl version: "$CURL_VERSION"
+else
+  echo curl not found. Exiting.
+  exit 1
+fi
+
 
 # Get the location of Tomcat and WildFly zip files as script argument or ask the user
 # For version 7.7.5: apache-tomcat-8.5.31.zip and wildfly-10.1.0.Final.zip
@@ -28,6 +37,21 @@ if [ ! -d $AS_DIR_PATH ]; then
   echo Folder not found: "$AS_DIR_PATH"
   exit 1
 fi
+
+
+detectDependenciesVersions() {
+  echo "Detecting dependencies versions"
+  local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
+
+  UID_VERSION=`echo "${studioPom}" | grep ui.designer.version | sed 's@.*>\(.*\)<.*@\1@g'`
+  THEME_BUILDER_VERSION=`echo "${studioPom}" | grep theme.builder.version | sed 's@.*>\(.*\)<.*@\1@g'`
+  STUDIO_WATCHDOG_VERSION=`echo "${studioPom}" | grep watchdog.version | sed 's@.*>\(.*\)<.*@\1@g'`
+
+  echo "UID_VERSION: ${UID_VERSION}"
+  echo "THEME_BUILDER_VERSION: ${THEME_BUILDER_VERSION}"
+  echo "STUDIO_WATCHDOG_VERSION: ${STUDIO_WATCHDOG_VERSION}"
+}
+
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build:
 #
@@ -196,6 +220,10 @@ build_maven_wrapper_install_maven_test_skip_with_target_directory_with_profile()
 }
 
 
+# 1s detect the versions of dependencies that will be built prior to build the Bonita Components
+detectDependenciesVersions
+
+
 # Note: Checkout folder of bonita-engine project need to be named community.
 build_maven_wrapper_install_maven_test_skip_with_target_directory_with_profile bonita-engine community tests,javadoc
 
@@ -228,11 +256,9 @@ build_maven_install_maven_test_skip bonita-connector-twitter 1.1.0-pomfixed
 
 build_maven_install_maven_test_skip bonita-connector-webservice 1.1.1
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
-build_maven_install_maven_test_skip bonita-theme-builder 1.1.0
+build_maven_install_maven_test_skip bonita-theme-builder ${THEME_BUILDER_VERSION}
 
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
-build_maven_install_maven_test_skip bonita-studio-watchdog studio-watchdog-7.2.0
+build_maven_install_maven_test_skip bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
 
 build_maven_install_maven_test_skip bonita-web-extensions
 
@@ -240,8 +266,7 @@ build_maven_install_skiptest bonita-web
 
 build_maven_install_maven_test_skip bonita-portal-js
  
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_install_skiptest bonita-ui-designer 1.7.75
+build_maven_install_skiptest bonita-ui-designer ${UID_VERSION}
 
 build_maven_install_maven_test_skip bonita-distrib
 
