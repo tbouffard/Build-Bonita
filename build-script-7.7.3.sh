@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.7.2
+BONITA_BPM_VERSION=7.7.3
 
 # Test that Mavene exists
 if hash mvn 2>/dev/null; then
@@ -241,7 +241,7 @@ build_maven_install_skiptest bonita-web
 build_maven_install_maven_test_skip bonita-portal-js
  
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_install_skiptest bonita-ui-designer 1.7.59
+build_maven_install_skiptest bonita-ui-designer 1.7.64
 
 build_maven_install_maven_test_skip bonita-distrib
 
