@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.7.3
+BONITA_BPM_VERSION=7.7.5
 
 # Test that Mavene exists
 if hash mvn 2>/dev/null; then
@@ -16,7 +16,7 @@ else
 fi
 
 # Get the location of Tomcat and WildFly zip files as script argument or ask the user
-# Fro version 7.7.2: apache-tomcat-8.5.31.zip and wildfly-10.1.0.Final.zip
+# For version 7.7.5: apache-tomcat-8.5.31.zip and wildfly-10.1.0.Final.zip
 if [ "$#" -eq 1 ]; then
   AS_DIR_PATH=$1
 else
@@ -241,7 +241,7 @@ build_maven_install_skiptest bonita-web
 build_maven_install_maven_test_skip bonita-portal-js
  
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_install_skiptest bonita-ui-designer 1.7.64
+build_maven_install_skiptest bonita-ui-designer 1.7.75
 
 build_maven_install_maven_test_skip bonita-distrib
 
