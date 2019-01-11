@@ -38,7 +38,7 @@ if [ ! -d $AS_DIR_PATH ]; then
   exit 1
 fi
 
-
+# Detect version of depencies required to build Bonita components in Maven pom.xml files
 detectDependenciesVersions() {
   echo "Detecting dependencies versions"
   local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
@@ -125,8 +125,13 @@ checkout() {
     checkout_folder_name="$repository_name"
   fi
   
-  # If repository already cloned run git pull, else clone it
-  git -C $checkout_folder_name pull || git clone --branch $branch_name --single-branch "https://github.com/bonitasoft/$repository_name.git" $checkout_folder_name
+  # If we don't already clone the repository do it
+  if [ ! -d "$checkout_folder_name/.git" ]; then
+    git clone "https://github.com/bonitasoft/$repository_name.git" $checkout_folder_name
+  fi
+  # Ensure we fetch all the tags and that we are on the appropriate one
+  git -C $checkout_folder_name fetch --tags
+  git -C $checkout_folder_name reset --hard tags/$branch_name
   
   # Move to the repository clone folder (required to run Maven wrapper)
   cd $checkout_folder_name
@@ -168,6 +173,10 @@ build() {
 
 publishToMavenLocal() {
   build_command="$build_command publishToMavenLocal"
+}
+
+clean() {
+  build_command="$build_command clean"
 }
 
 install() {
