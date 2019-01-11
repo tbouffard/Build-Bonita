@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.7.5
+BONITA_BPM_VERSION=7.8.0
 
 # Test that Maven exists
 if hash mvn 2>/dev/null; then
@@ -25,7 +25,7 @@ fi
 
 
 # Get the location of Tomcat and WildFly zip files as script argument or ask the user
-# For version 7.7.5: apache-tomcat-8.5.31.zip and wildfly-10.1.0.Final.zip
+# For version 7.8.0: apache-tomcat-8.5.31.zip and wildfly-10.1.0.Final.zip
 if [ "$#" -eq 1 ]; then
   AS_DIR_PATH=$1
 else
@@ -139,6 +139,14 @@ run_maven_with_standard_system_properties() {
   cd ..
 }
 
+# FIXME: -Puid-version
+run_gradle_with_standard_system_properties() {
+  build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dwildfly.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.7"
+  eval "$build_command"
+  # Go back to script folder (checkout move current dirrectory to project checkout folder.
+  cd ..
+}
+
 build_maven() {
   build_command="mvn"
 }
@@ -147,6 +155,19 @@ build_maven_wrapper() {
   # FIXME: remove temporary workaround added for bonita-web
   chmod u+x mvnw
   build_command="./mvnw"
+}
+
+build_gradle_wrapper() {
+  chmod u+x gradlew
+  build_command="./gradlew"
+}
+
+build() {
+  build_command="$build_command build"
+}
+
+publishToMavenLocal() {
+  build_command="$build_command publishToMavenLocal"
 }
 
 install() {
@@ -219,6 +240,12 @@ build_maven_wrapper_install_maven_test_skip_with_target_directory_with_profile()
   run_maven_with_standard_system_properties
 }
 
+build_gradle_build() {
+  checkout "$@"
+  build_gradle_wrapper
+  publishToMavenLocal
+  run_gradle_with_standard_system_properties
+}
 
 # 1s detect the versions of dependencies that will be built prior to build the Bonita Components
 detectDependenciesVersions
@@ -246,7 +273,7 @@ build_maven_install_maven_test_skip bonita-connector-googlecalendar-V3 bonita-co
 
 build_maven_install_maven_test_skip bonita-connector-ldap bonita-connector-ldap-1.0.1
 
-build_maven_install_maven_test_skip bonita-connector-rest 1.0.4
+build_maven_install_maven_test_skip bonita-connector-rest 1.0.5
 
 build_maven_install_maven_test_skip bonita-connector-salesforce 1.0.14
 
@@ -256,17 +283,28 @@ build_maven_install_maven_test_skip bonita-connector-twitter 1.1.0-pomfixed
 
 build_maven_install_maven_test_skip bonita-connector-webservice 1.1.1
 
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
 build_maven_install_maven_test_skip bonita-theme-builder ${THEME_BUILDER_VERSION}
 
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
 build_maven_install_maven_test_skip bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
+
+# bonita-web-pages is build using a specific version of UI Designer.
+# Version is defined in https://github.com/bonitasoft/bonita-web-pages/blob/$BONITA_BPM_VERSION/build.gradle
+# FIXME: this will be removed in future release as the same version as the one package in the release will be used.
+build_maven_install_skiptest bonita-ui-designer 1.8.28
+
+build_gradle_build bonita-web-pages
+
+# This is the version of the UI Designer embedded in Bonita release
+# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
+build_maven_install_skiptest bonita-ui-designer ${UID_VERSION}
 
 build_maven_install_maven_test_skip bonita-web-extensions
 
 build_maven_install_skiptest bonita-web
 
 build_maven_install_maven_test_skip bonita-portal-js
- 
-build_maven_install_skiptest bonita-ui-designer ${UID_VERSION}
 
 build_maven_install_maven_test_skip bonita-distrib
 
