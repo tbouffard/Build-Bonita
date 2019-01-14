@@ -25,7 +25,7 @@ fi
 
 
 # Get the location of Tomcat and WildFly zip files as script argument or ask the user
-# For version 7.8.0: apache-tomcat-8.5.31.zip and wildfly-10.1.0.Final.zip
+# For version 7.8.0: apache-tomcat-8.5.34.zip and wildfly-10.1.0.Final.zip
 if [ "$#" -eq 1 ]; then
   AS_DIR_PATH=$1
 else
