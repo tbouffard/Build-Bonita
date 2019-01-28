@@ -24,20 +24,6 @@ else
 fi
 
 
-# Get the location of Tomcat and WildFly zip files as script argument or ask the user
-# For version 7.8.0: apache-tomcat-8.5.34.zip and wildfly-10.1.0.Final.zip
-if [ "$#" -eq 1 ]; then
-  AS_DIR_PATH=$1
-else
-  read -p "Provide path to folder that contains Tomcat and WildFly zip file: " AS_DIR_PATH
-fi
-
-# Check that folder exists
-if [ ! -d $AS_DIR_PATH ]; then
-  echo Folder not found: "$AS_DIR_PATH"
-  exit 1
-fi
-
 # Detect version of depencies required to build Bonita components in Maven pom.xml files
 detectDependenciesVersions() {
   echo "Detecting dependencies versions"
@@ -138,7 +124,7 @@ checkout() {
 }
 
 run_maven_with_standard_system_properties() {
-  build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dwildfly.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.7"
+  build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.7"
   eval "$build_command"
   # Go back to script folder (checkout move current dirrectory to project checkout folder.
   cd ..
@@ -146,7 +132,7 @@ run_maven_with_standard_system_properties() {
 
 # FIXME: -Puid-version
 run_gradle_with_standard_system_properties() {
-  build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dwildfly.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.7"
+  build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.7"
   eval "$build_command"
   # Go back to script folder (checkout move current dirrectory to project checkout folder.
   cd ..
