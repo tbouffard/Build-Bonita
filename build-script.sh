@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.8.0
+BONITA_BPM_VERSION=7.8.2
 
 # Test that Maven exists
 if hash mvn 2>/dev/null; then
@@ -15,6 +15,7 @@ else
   exit 1
 fi
 
+# Test if Curl exists
 if hash curl 2>/dev/null; then
   CURL_VERSION="$(curl --version 2>&1  | awk -F " " 'NR==1 {print $2}')"
   echo Using curl version: "$CURL_VERSION"
@@ -270,7 +271,7 @@ build_maven_install_maven_test_skip bonita-connector-ldap bonita-connector-ldap-
 
 build_maven_install_maven_test_skip bonita-connector-rest 1.0.5
 
-build_maven_install_maven_test_skip bonita-connector-salesforce 1.0.14
+build_maven_install_maven_test_skip bonita-connector-salesforce 1.1.2
 
 build_maven_install_maven_test_skip bonita-connector-scripting bonita-connector-scripting-20151015
 
