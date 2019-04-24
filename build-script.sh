@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.8.3
+BONITA_BPM_VERSION=7.8.4
 
 # Test that Maven exists
 if hash mvn 2>/dev/null; then
@@ -131,7 +131,6 @@ run_maven_with_standard_system_properties() {
   cd ..
 }
 
-# FIXME: -Puid-version
 run_gradle_with_standard_system_properties() {
   build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.7"
   eval "$build_command"
@@ -144,13 +143,10 @@ build_maven() {
 }
 
 build_maven_wrapper() {
-  # FIXME: remove temporary workaround added for bonita-web
-  chmod u+x mvnw
   build_command="./mvnw"
 }
 
 build_gradle_wrapper() {
-  chmod u+x gradlew
   build_command="./gradlew"
 }
 
@@ -178,6 +174,7 @@ maven_test_skip() {
   build_command="$build_command -Dmaven.test.skip=true"
 }
 
+# FIXME: should not be used
 skiptest() {
   build_command="$build_command -DskipTests"
 }
@@ -192,6 +189,7 @@ profile() {
 build_maven_install_maven_test_skip() {
   checkout "$@"
   build_maven
+  clean
   install
   maven_test_skip
   run_maven_with_standard_system_properties
@@ -204,6 +202,7 @@ build_maven_install_maven_test_skip() {
 build_maven_install_skiptest() {
   checkout "$@"
   build_maven
+  clean
   install
   skiptest
   run_maven_with_standard_system_properties
@@ -216,9 +215,15 @@ build_maven_wrapper_verify_maven_test_skip_with_profile()
 {
   checkout $1
   build_maven_wrapper
+  clean
   verify
   maven_test_skip
   profile $2
+  
+  # FIXME: remove temporary workaround added to make sure that we use public repository
+  # Issue is related to Tycho target-platform-configuration plugin that rely on the artifact org.bonitasoft.studio:platform that is not built
+	sed -i 's,http://repositories.rd.lan/p2/7.7,http://update-site.bonitasoft.com/p2/7.7,g' platform/platform.target
+  
   run_maven_with_standard_system_properties
 }
 
@@ -230,6 +235,7 @@ build_maven_wrapper_install_maven_test_skip_with_target_directory_with_profile()
 {
   checkout $1 $BONITA_BPM_VERSION $2
   build_maven_wrapper
+  clean
   install  
   maven_test_skip
   profile $3
@@ -239,6 +245,7 @@ build_maven_wrapper_install_maven_test_skip_with_target_directory_with_profile()
 build_gradle_build() {
   checkout "$@"
   build_gradle_wrapper
+  clean
   publishToMavenLocal
   run_gradle_with_standard_system_properties
 }
@@ -288,7 +295,7 @@ build_maven_install_maven_test_skip bonita-studio-watchdog studio-watchdog-${STU
 # bonita-web-pages is build using a specific version of UI Designer.
 # Version is defined in https://github.com/bonitasoft/bonita-web-pages/blob/$BONITA_BPM_VERSION/build.gradle
 # FIXME: this will be removed in future release as the same version as the one package in the release will be used.
-build_maven_install_skiptest bonita-ui-designer 1.8.28
+build_maven_install_skiptest bonita-ui-designer 1.8.36
 
 build_gradle_build bonita-web-pages
 
