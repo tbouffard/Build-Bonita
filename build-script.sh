@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.8.4
+BONITA_BPM_VERSION=7.9.0
 
 # Test that Maven exists
 if hash mvn 2>/dev/null; then
