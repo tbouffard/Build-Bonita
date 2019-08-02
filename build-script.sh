@@ -4,7 +4,7 @@ set -u
 set -e
 
 # Bonita version
-BONITA_BPM_VERSION=7.9.0
+BONITA_BPM_VERSION=7.9.2
 
 # Test that x server is running. Required to generate Bonita Studio models
 # Can be ignored if Studio is build without the "generate" Maven profile
@@ -273,11 +273,11 @@ build_maven_install_maven_test_skip bonita-connectors 1.0.0
 
 build_maven_install_maven_test_skip bonita-connector-alfresco 2.0.1
 
-build_maven_install_maven_test_skip bonita-connector-cmis 3.0.1
+build_maven_install_maven_test_skip bonita-connector-cmis 3.0.3
 
-build_maven_install_maven_test_skip bonita-connector-database 1.2.2
+build_maven_install_maven_test_skip bonita-connector-database 2.0.0
 
-build_maven_install_maven_test_skip bonita-connector-email bonita-connector-email-impl-1.0.15
+build_maven_install_maven_test_skip bonita-connector-email bonita-connector-email-impl-1.1.0
 
 build_maven_install_maven_test_skip bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-1.0.0
 
@@ -287,11 +287,11 @@ build_maven_install_maven_test_skip bonita-connector-rest 1.0.5
 
 build_maven_install_maven_test_skip bonita-connector-salesforce 1.1.2
 
-build_maven_install_maven_test_skip bonita-connector-scripting bonita-connector-scripting-20151015
+build_maven_install_maven_test_skip bonita-connector-scripting bonita-connector-scripting 1.1.0
 
-build_maven_install_maven_test_skip bonita-connector-twitter 1.1.0-pomfixed
+build_maven_install_maven_test_skip bonita-connector-twitter 1.2.0
 
-build_maven_install_maven_test_skip bonita-connector-webservice 1.1.1
+build_maven_install_maven_test_skip bonita-connector-webservice 1.2.2
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
 build_maven_install_maven_test_skip bonita-theme-builder ${THEME_BUILDER_VERSION}
@@ -302,7 +302,7 @@ build_maven_install_maven_test_skip bonita-studio-watchdog studio-watchdog-${STU
 # bonita-web-pages is build using a specific version of UI Designer.
 # Version is defined in https://github.com/bonitasoft/bonita-web-pages/blob/$BONITA_BPM_VERSION/build.gradle
 # FIXME: this will be removed in future release as the same version as the one package in the release will be used.
-build_maven_install_skiptest bonita-ui-designer 1.8.36
+build_maven_install_skiptest bonita-ui-designer 1.9.53
 
 build_gradle_build bonita-web-pages
 
@@ -319,6 +319,6 @@ build_maven_install_maven_test_skip bonita-portal-js
 build_maven_install_maven_test_skip bonita-distrib
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_install_maven_test_skip image-overlay-plugin image-overlay-plugin-1.0.4
+build_maven_install_maven_test_skip image-overlay-plugin image-overlay-plugin-1.0.8
 
 build_maven_wrapper_verify_maven_test_skip_with_profile bonita-studio mirrored,generate
