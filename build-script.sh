@@ -18,8 +18,8 @@ export OPENSSL_CONF=/etc/ssl
 
 # Script configuration
 # You can set the following environment variables
-# SCRIPT_BUILD_NO_CLEAN=true
-# SCRIPT_BUILD_QUIET=true
+SCRIPT_BUILD_NO_CLEAN=${SCRIPT_BUILD_NO_CLEAN:-false}
+SCRIPT_BUILD_QUIET=${SCRIPT_BUILD_QUIET:-false}
 
 # Bonita version
 BONITA_BPM_VERSION=7.9.4
@@ -220,7 +220,6 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 checkPrerequisites() {
     # Test that x server is running. Required to generate Bonita Studio models
     # Can be ignored if Studio is build without the "generate" Maven profile
-    # Warning: this requirement prevents to build on Travis CI
     if ! xset q &>/dev/null; then
         echo "No X server at \$DISPLAY [$DISPLAY]" >&2
         exit 1
