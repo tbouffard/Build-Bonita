@@ -221,10 +221,11 @@ checkPrerequisites() {
     # Test that x server is running. Required to generate Bonita Studio models
     # Can be ignored if Studio is build without the "generate" Maven profile
     # Warning: this requirement prevents to build on Travis CI
-    if ! xset q &>/dev/null; then
-        echo "No X server at \$DISPLAY [$DISPLAY]" >&2
-        exit 1
-    fi
+    # Temp disable this as it prevents to build on Travis CI
+#    if ! xset q &>/dev/null; then
+#        echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+#        exit 1
+#    fi
 
     # Test that Maven exists
     # FIXME: remove once all projects includes Maven wrapper
