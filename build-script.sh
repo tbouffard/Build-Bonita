@@ -223,7 +223,7 @@ build_maven_wrapper_install_skiptest()
 	build_maven_wrapper
 	build_quiet_if_requested
 	clean
-	install  
+	install
 	skiptest
 	run_maven_with_standard_system_properties
 }
@@ -249,7 +249,7 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 ########################################################################################################################
 
 detectStudioDependenciesVersions() {
-	echo "Detecting dependencies versions"
+	echo "Detecting Studio dependencies versions"
 	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
 
 	STUDIO_UID_VERSION=`echo "${studioPom}" | grep ui.designer.version | sed 's@.*>\(.*\)<.*@\1@g'`
@@ -259,6 +259,42 @@ detectStudioDependenciesVersions() {
 	echo "STUDIO_WATCHDOG_VERSION: ${STUDIO_WATCHDOG_VERSION}"
 }
 
+detectConnectorsVersions() {
+  echo "Detecting Connectors versions"
+  local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
+  CONNECTOR_VERSION_ALFRESCO=`echo "${studioPom}" | grep connector.version.alfresco | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_ALFRESCO: ${CONNECTOR_VERSION_ALFRESCO}"
+
+  CONNECTOR_VERSION_CMIS=`echo "${studioPom}" | grep connector.version.cmis | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_CMIS: ${CONNECTOR_VERSION_CMIS}"
+
+  CONNECTOR_VERSION_DATABASE=`echo "${studioPom}" | grep connector.version.database | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_DATABASE: ${CONNECTOR_VERSION_DATABASE}"
+
+  CONNECTOR_VERSION_EMAIL=`echo "${studioPom}" | grep connector.version.email | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_EMAIL: ${CONNECTOR_VERSION_EMAIL}"
+
+  CONNECTOR_VERSION_GOOGLE_CALENDAR_V3=`echo "${studioPom}" | grep google-calendar-v3 | grep -v '<version>' | grep -v 'impl' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_GOOGLE_CALENDAR_V3: ${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}"
+
+  CONNECTOR_VERSION_LDAP=`echo "${studioPom}" | grep connector.version.ldap | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_LDAP: ${CONNECTOR_VERSION_LDAP}"
+
+  CONNECTOR_VERSION_REST=`echo "${studioPom}" | grep connector.version.rest | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_REST: ${CONNECTOR_VERSION_REST}"
+
+  CONNECTOR_VERSION_SALESFORCE=`echo "${studioPom}" | grep connector.version.salesforce | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_SALESFORCE: ${CONNECTOR_VERSION_SALESFORCE}"
+
+  CONNECTOR_VERSION_SCRIPTING=`echo "${studioPom}" | grep connector.version.scripting | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_SCRIPTING: ${CONNECTOR_VERSION_SCRIPTING}"
+
+  CONNECTOR_VERSION_TWITTER=`echo "${studioPom}" | grep connector.version.twitter | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_TWITTER: ${CONNECTOR_VERSION_TWITTER}"
+
+  CONNECTOR_VERSION_WEBSERVICE=`echo "${studioPom}" | grep connector.version.webservice | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+  echo "CONNECTOR_VERSION_WEBSERVICE: ${CONNECTOR_VERSION_WEBSERVICE}"
+}
 
 ########################################################################################################################
 # MAIN
@@ -296,9 +332,6 @@ detectStudioDependenciesVersions() {
 # training-presentation-tool: fork of reveal.js with custom look and feel.
 # widget-builder: automatically downloaded in the build of bonita-ui-designer project.
 
-
-
-
 build_gradle_wrapper_test_skip_publishToMavenLocal bonita-engine
 
 build_maven_wrapper_install_skiptest bonita-userfilters
@@ -317,21 +350,21 @@ build_gradle_wrapper_test_skip_publishToMavenLocal bonita-web-pages
 
 build_maven_wrapper_install_skiptest bonita-distrib
 
-# Each connectors implementation version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml.
-# For the version of bonita-connectors refers to one of the included connector and use the parent project version (parent project should be bonita-connectors).
-# You need to find connector git repository tag that provides a given connector implementation version.
-build_maven_install_skiptest bonita-connectors 1.0.0
-build_maven_install_skiptest bonita-connector-alfresco 2.0.1
-build_maven_install_skiptest bonita-connector-cmis 3.0.3
-build_maven_install_skiptest bonita-connector-database 2.0.1
-build_maven_install_skiptest bonita-connector-email 1.1.1
-build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-1.0.0
-build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-1.0.1
-build_maven_install_skiptest bonita-connector-rest 1.0.6
-build_maven_install_skiptest bonita-connector-salesforce 1.1.2
-build_maven_install_skiptest bonita-connector-scripting 1.1.0
-build_maven_install_skiptest bonita-connector-twitter 1.2.0
-build_maven_install_skiptest bonita-connector-webservice 1.2.3
+# Connectors
+detectConnectorsVersions
+
+build_maven_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
+build_maven_install_skiptest bonita-connector-cmis ${CONNECTOR_VERSION_CMIS}
+build_maven_install_skiptest bonita-connector-database ${CONNECTOR_VERSION_DATABASE}
+build_maven_install_skiptest bonita-connector-email ${CONNECTOR_VERSION_EMAIL}
+build_maven_install_skiptest bonita-connector-rest ${CONNECTOR_VERSION_REST}
+build_maven_install_skiptest bonita-connector-salesforce ${CONNECTOR_VERSION_SALESFORCE}
+build_maven_install_skiptest bonita-connector-scripting ${CONNECTOR_VERSION_SCRIPTING}
+build_maven_install_skiptest bonita-connector-twitter ${CONNECTOR_VERSION_TWITTER}
+build_maven_install_skiptest bonita-connector-webservice ${CONNECTOR_VERSION_WEBSERVICE}
+# connectors using legacy way of building
+build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}
+build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNECTOR_VERSION_LDAP}
 
 
 detectStudioDependenciesVersions
