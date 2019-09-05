@@ -7,7 +7,6 @@ set +o nounset
 
 # If you want to make 100% sure that you do a clean build from scratch:
 # rm -rf ~/.m2/repository/org/bonitasoft/
-# rm -rf ~/.m2/repository/org/bonitasoft/
 # rm -rf ~/.gradle/caches
 # rm -rf .gradle in the folder where the script is located
 
@@ -22,7 +21,7 @@ export OPENSSL_CONF=/etc/ssl
 # SCRIPT_BUILD_QUIET=true
 
 # Bonita version
-BONITA_BPM_VERSION=7.9.2
+BONITA_BPM_VERSION=7.9.3
 
 # Bonita Studio p2 public repository
 STUDIO_P2_URL=http://update-site.bonitasoft.com/p2/4.10
@@ -104,19 +103,6 @@ checkout() {
 	cd $checkout_folder_name
 
 	# Workarounds
-	# FIXME: remove connector workaround for 7.9.3 release
-	if [[ "$repository_name" == "bonita-connector-database" ]]; then
-	  echo "WARN: workaround on $repository_name to remove Oracle JDBC dependency not available on public repositories"
-	  cp ./../workarounds/bonita-connector-database_pom.xml ./pom.xml
-	fi
-	if [[ "$repository_name" == "bonita-connector-email" ]]; then
-	  echo "WARN: workaround on $repository_name to fix dependency on bonita-engine SNAPSHOT version"
-	  sed -i 's,<version>7.9.0-SNAPSHOT</version>,<version>${bonita.engine.version}</version>,g' pom.xml
-	fi
-	if [[ "$repository_name" == "bonita-connector-webservice" ]]; then
-	  echo "WARN: workaround on $repository_name to fix dependency on bonita-engine SNAPSHOT version and missing versions for some dependencies"
-	  cp ./../workarounds/bonita-connector-webservices_pom.xml ./pom.xml
-	fi
 	# FIXME: remove workaround when bonita-web-pages no longer includes dependencies on internal tooling
 	if [[ "$repository_name" == "bonita-web-pages" ]]; then
 	  echo "WARN: workaround on $repository_name - remove bonitasoft internal gradle plugin"
@@ -146,6 +132,7 @@ run_gradle_with_standard_system_properties() {
 	cd ..
 }
 
+# FIXME: should be replaced in all project by Maven wrapper
 build_maven() {
 	build_command="mvn"
 }
@@ -189,13 +176,6 @@ verify() {
 	build_command="$build_command verify"
 }
 
-maven_test_skip() {
-	build_command="$build_command -Dmaven.test.skip=true"
-}
-
-# FIXME: should not be used
-# Needed due to https://issues.apache.org/jira/browse/MJAR-138
-# Will be fixed once https://github.com/bonitasoft/bonita-web-sp/pull/512 merged
 skiptest() {
 	build_command="$build_command -DskipTests"
 }
@@ -208,20 +188,7 @@ profile() {
 	build_command="$build_command -P$1"
 }
 
-# params:
-# - Git repository name
-# - Branch name (optional)
-build_maven_install_maven_test_skip() {
-	checkout "$@"
-	build_maven
-	build_quiet_if_requested
-	clean
-	install
-	maven_test_skip
-	run_maven_with_standard_system_properties
-}
-
-# FIXME: should not be used, see comment on skiptest function
+#FIXME: should be replaced in all projects by Maven wrapper
 # params:
 # - Git repository name
 # - Branch name (optional)
@@ -238,21 +205,21 @@ build_maven_install_skiptest() {
 # params:
 # - Git repository name
 # - Profile name
-build_maven_wrapper_verify_maven_test_skip_with_profile()
+build_maven_wrapper_verify_skiptest_with_profile()
 {
 	checkout $1
 	build_maven_wrapper
 	build_quiet_if_requested
 	clean
 	verify
-	maven_test_skip
+	skiptest
 	profile $2
 	run_maven_with_standard_system_properties
 }
 
 # params:
 # - Git repository name
-build_maven_wrapper_install_maven_test_skip()
+build_maven_wrapper_install_skiptest()
 {
 	checkout "$@"
 	# FIXME: remove temporary workaround when https://github.com/bonitasoft/bonita-ui-designer-sp/pull/2773 will be part of an official release
@@ -261,7 +228,7 @@ build_maven_wrapper_install_maven_test_skip()
 	build_quiet_if_requested
 	clean
 	install  
-	maven_test_skip
+	skiptest
 	run_maven_with_standard_system_properties
 }
 
@@ -340,42 +307,43 @@ detectStudioDependenciesVersions() {
 
 build_gradle_wrapper_test_skip_publishToMavenLocal bonita-engine
 
-build_maven_wrapper_install_maven_test_skip bonita-userfilters
+build_maven_wrapper_install_skiptest bonita-userfilters
 
-build_maven_wrapper_install_maven_test_skip bonita-web-extensions
-# FIXME: see comments on skiptest function
-build_maven_install_skiptest bonita-web
-build_maven_install_maven_test_skip bonita-portal-js
+build_maven_wrapper_install_skiptest bonita-web-extensions
+
+build_maven_wrapper_install_skiptest bonita-web
+
+build_maven_install_skiptest bonita-portal-js
 
 # bonita-web-pages is build using a specific version of UI Designer.
 # Version is defined in https://github.com/bonitasoft/bonita-web-pages/blob/$BONITA_BPM_VERSION/build.gradle
-build_maven_wrapper_install_maven_test_skip bonita-ui-designer 1.9.53
-# FIXME: see pull request to fix the issue: https://github.com/bonitasoft/bonita-ui-designer-sp/pull/2774
+build_maven_wrapper_install_skiptest bonita-ui-designer 1.9.53
+
 build_gradle_wrapper_test_skip_publishToMavenLocal bonita-web-pages
 
-build_maven_wrapper_install_maven_test_skip bonita-distrib
+build_maven_wrapper_install_skiptest bonita-distrib
 
 # Each connectors implementation version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml.
 # For the version of bonita-connectors refers to one of the included connector and use the parent project version (parent project should be bonita-connectors).
 # You need to find connector git repository tag that provides a given connector implementation version.
-build_maven_install_maven_test_skip bonita-connectors 1.0.0
-build_maven_install_maven_test_skip bonita-connector-alfresco 2.0.1
-build_maven_install_maven_test_skip bonita-connector-cmis 3.0.3
-build_maven_install_maven_test_skip bonita-connector-database 2.0.0
-build_maven_install_maven_test_skip bonita-connector-email 1.1.0
-build_maven_install_maven_test_skip bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-1.0.0
-build_maven_install_maven_test_skip bonita-connector-ldap bonita-connector-ldap-1.0.1
-build_maven_install_maven_test_skip bonita-connector-rest 1.0.6
-build_maven_install_maven_test_skip bonita-connector-salesforce 1.1.2
-build_maven_install_maven_test_skip bonita-connector-scripting 1.1.0
-build_maven_install_maven_test_skip bonita-connector-twitter 1.2.0
-build_maven_install_maven_test_skip bonita-connector-webservice 1.2.2
+build_maven_install_skiptest bonita-connectors 1.0.0
+build_maven_install_skiptest bonita-connector-alfresco 2.0.1
+build_maven_install_skiptest bonita-connector-cmis 3.0.3
+build_maven_install_skiptest bonita-connector-database 2.0.1
+build_maven_install_skiptest bonita-connector-email 1.1.1
+build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-1.0.0
+build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-1.0.1
+build_maven_install_skiptest bonita-connector-rest 1.0.6
+build_maven_install_skiptest bonita-connector-salesforce 1.1.2
+build_maven_install_skiptest bonita-connector-scripting 1.1.0
+build_maven_install_skiptest bonita-connector-twitter 1.2.0
+build_maven_install_skiptest bonita-connector-webservice 1.2.3
 
 
 detectStudioDependenciesVersions
-build_maven_install_maven_test_skip bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
+build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_wrapper_install_maven_test_skip image-overlay-plugin image-overlay-plugin-1.0.8
-build_maven_wrapper_install_maven_test_skip bonita-ui-designer ${STUDIO_UID_VERSION}
+build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-1.0.8
+build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 
 build_maven_wrapper_verify_maven_test_skip_with_profile bonita-studio mirrored,generate
