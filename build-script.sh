@@ -8,7 +8,8 @@ set +o nounset
 # If you want to make 100% sure that you do a clean build from scratch:
 # rm -rf ~/.m2/repository/org/bonitasoft/
 # rm -rf ~/.gradle/caches
-# rm -rf .gradle in the folder where the script is located
+# find -type d -name ".gradle" -prune -exec rm -rf {} \;
+# find -type d -name target -prune -exec rm -rf {} \;
 
 # Workaround for at least Debian Buster
 # Require to build bonita-portal-js due to issue with PhantomJS launched by Karma
@@ -21,7 +22,7 @@ export OPENSSL_CONF=/etc/ssl
 # SCRIPT_BUILD_QUIET=true
 
 # Bonita version
-BONITA_BPM_VERSION=7.9.3
+BONITA_BPM_VERSION=7.9.4
 
 # Bonita Studio p2 public repository
 STUDIO_P2_URL=http://update-site.bonitasoft.com/p2/4.10
@@ -103,11 +104,6 @@ checkout() {
 	cd $checkout_folder_name
 
 	# Workarounds
-	# FIXME: remove workaround when bonita-web-pages no longer includes dependencies on internal tooling
-	if [[ "$repository_name" == "bonita-web-pages" ]]; then
-	  echo "WARN: workaround on $repository_name - remove bonitasoft internal gradle plugin"
-	  cp ./../workarounds/bonita-web-pages_build.gradle ./build.gradle
-	fi
 	# FIXME: remove temporary workaround added to make sure that we use public repository (Bonita internal tracker issue id: BST-463)
 	# Issue is related to Tycho target-platform-configuration plugin that rely on the artifact org.bonitasoft.studio:platform.
 	# The artifact include Ant Maven plugin to update the platform.target file but it is not executed before Tycho is executed and read the incorrect URL.
@@ -242,8 +238,6 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 	run_gradle_with_standard_system_properties
 }
 
-
-
 ########################################################################################################################
 # PARAMETERS PARSING AND VALIDATIONS
 ########################################################################################################################
@@ -346,4 +340,4 @@ build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WAT
 build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-1.0.8
 build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 
-build_maven_wrapper_verify_maven_test_skip_with_profile bonita-studio mirrored,generate
+build_maven_wrapper_verify_skiptest_with_profile bonita-studio mirrored,generate
