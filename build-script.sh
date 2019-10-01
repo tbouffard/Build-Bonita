@@ -117,7 +117,8 @@ build_gradle_wrapper() {
 build_quiet_if_requested() {
 	if [[ "${SCRIPT_BUILD_QUIET}" == "true" ]]; then
 		echo "Configure quiet build"
-		build_command="$build_command --quiet"
+		# --quiet seems not working for gradle build on Travis CI, use short form instead as in engine (see https://github.com/bonitasoft/bonita-engine/blob/7.9.4/.travis.yml)
+		build_command="$build_command -q"
 	fi
 }
 
