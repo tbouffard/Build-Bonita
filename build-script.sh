@@ -218,7 +218,9 @@ build_maven_wrapper_verify_skiptest_with_profile()
 build_maven_wrapper_install_skiptest()
 {
 	checkout "$@"
-	# FIXME: remove temporary workaround when https://github.com/bonitasoft/bonita-ui-designer-sp/pull/2773 will be part of an official release
+	# FIXME: required to build UID
+	# This has been fixed in UID 1.9.56, see https://github.com/bonitasoft/bonita-ui-designer/commit/edf0a0c7f943e8f215890550247d61eba14932c6
+	# To be removed when we will build newest UID versions
 	chmod u+x mvnw
 	build_maven_wrapper
 	build_quiet_if_requested
@@ -291,7 +293,6 @@ detectStudioDependenciesVersions() {
 # preact-chartjs-2: required for Bonita Subscription Intelligent Continuous Improvement module.
 # preact-content-loader: required for Bonita Subscription Intelligent Continuous Improvement module.
 # restlet-framework-java: /!\
-# sandbox: a sandbox for developers /!\ (private ?)
 # swt-repo: legacy repository required by Bonita Studio. Deprecated.
 # training-presentation-tool: fork of reveal.js with custom look and feel.
 # widget-builder: automatically downloaded in the build of bonita-ui-designer project.
@@ -306,7 +307,7 @@ build_maven_wrapper_install_skiptest bonita-userfilters
 build_maven_wrapper_install_skiptest bonita-web-extensions
 
 build_maven_wrapper_install_skiptest bonita-web
-
+# TODO with Bonita 7.10, we should be able to use the maven wrapper
 build_maven_install_skiptest bonita-portal-js
 
 # bonita-web-pages is build using a specific version of UI Designer.
@@ -321,17 +322,17 @@ build_maven_wrapper_install_skiptest bonita-distrib
 # For the version of bonita-connectors refers to one of the included connector and use the parent project version (parent project should be bonita-connectors).
 # You need to find connector git repository tag that provides a given connector implementation version.
 build_maven_install_skiptest bonita-connectors 1.0.0
-build_maven_install_skiptest bonita-connector-alfresco 2.0.1
-build_maven_install_skiptest bonita-connector-cmis 3.0.3
-build_maven_install_skiptest bonita-connector-database 2.0.1
-build_maven_install_skiptest bonita-connector-email 1.1.1
+build_maven_wrapper_install_skiptest bonita-connector-alfresco 2.0.1
+build_maven_wrapper_install_skiptest bonita-connector-cmis 3.0.3
+build_maven_wrapper_install_skiptest bonita-connector-database 2.0.1
+build_maven_wrapper_install_skiptest bonita-connector-email 1.1.1
 build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-1.0.0
 build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-1.0.1
-build_maven_install_skiptest bonita-connector-rest 1.0.6
-build_maven_install_skiptest bonita-connector-salesforce 1.1.2
-build_maven_install_skiptest bonita-connector-scripting 1.1.0
-build_maven_install_skiptest bonita-connector-twitter 1.2.0
-build_maven_install_skiptest bonita-connector-webservice 1.2.3
+build_maven_wrapper_install_skiptest bonita-connector-rest 1.0.6
+build_maven_wrapper_install_skiptest bonita-connector-salesforce 1.1.2
+build_maven_wrapper_install_skiptest bonita-connector-scripting 1.1.0
+build_maven_wrapper_install_skiptest bonita-connector-twitter 1.2.0
+build_maven_wrapper_install_skiptest bonita-connector-webservice 1.2.3
 
 
 detectStudioDependenciesVersions
