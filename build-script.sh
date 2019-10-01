@@ -18,8 +18,8 @@ export OPENSSL_CONF=/etc/ssl
 
 # Script configuration
 # You can set the following environment variables
-# SCRIPT_BUILD_NO_CLEAN=true
-# SCRIPT_BUILD_QUIET=true
+SCRIPT_BUILD_NO_CLEAN=${SCRIPT_BUILD_NO_CLEAN:-false}
+SCRIPT_BUILD_QUIET=${SCRIPT_BUILD_QUIET:-false}
 
 # Bonita version
 BONITA_BPM_VERSION=7.9.4
