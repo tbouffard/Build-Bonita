@@ -6,7 +6,7 @@ dist: trusty
 before_cache:
   # Maven: ensure that we do not keep bonitasoft artifacts across builds
   - rm -rf $HOME/.m2/repository/org/bonitasoft
-  # Gradle
+  # Gradle: see https://docs.travis-ci.com/user/languages/java/#projects-using-gradle
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
