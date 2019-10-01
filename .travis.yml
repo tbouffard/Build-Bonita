@@ -1,7 +1,7 @@
 language: java
 jdk: openjdk8
 os: linux
-dist: xenial
+dist: trusty
 
 before_cache:
   # Maven: ensure that we do not keep bonitasoft artifacts accross builds
