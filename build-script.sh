@@ -259,6 +259,14 @@ detectStudioDependenciesVersions() {
 	echo "STUDIO_WATCHDOG_VERSION: ${STUDIO_WATCHDOG_VERSION}"
 }
 
+detectWebPagesDependenciesVersions() {
+	echo "Detecting web-pages dependencies versions"
+	local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_BPM_VERSION}/build.gradle`
+
+	WEB_PAGES_UID_VERSION=`echo "${webPagesGradleBuild}" | tr --squeeze-repeats "[:blank:]" | tr --delete "\n" | sed 's@.*UIDesigner {\(.*\)"}.*@\1@g' | sed 's@.*version "\(.*\)@\1@g'`
+	echo "WEB_PAGES_UID_VERSION: ${WEB_PAGES_UID_VERSION}"
+}
+
 
 ########################################################################################################################
 # MAIN
@@ -310,9 +318,8 @@ build_maven_wrapper_install_skiptest bonita-web
 build_maven_install_skiptest bonita-portal-js
 
 # bonita-web-pages is build using a specific version of UI Designer.
-# Version is defined in https://github.com/bonitasoft/bonita-web-pages/blob/$BONITA_BPM_VERSION/build.gradle
-build_maven_wrapper_install_skiptest bonita-ui-designer 1.9.53
-
+detectWebPagesDependenciesVersions
+build_maven_wrapper_install_skiptest bonita-ui-designer ${WEB_PAGES_UID_VERSION}
 build_gradle_wrapper_test_skip_publishToMavenLocal bonita-web-pages
 
 build_maven_wrapper_install_skiptest bonita-distrib
