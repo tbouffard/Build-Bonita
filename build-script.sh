@@ -252,9 +252,11 @@ detectStudioDependenciesVersions() {
 	echo "Detecting dependencies versions"
 	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
 
+	STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION=`echo "${studioPom}" | grep image-overlay-plugin.version | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
 	STUDIO_UID_VERSION=`echo "${studioPom}" | grep ui.designer.version | sed 's@.*>\(.*\)<.*@\1@g'`
 	STUDIO_WATCHDOG_VERSION=`echo "${studioPom}" | grep watchdog.version | sed 's@.*>\(.*\)<.*@\1@g'`
 
+	echo "STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION: ${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}"
 	echo "STUDIO_UID_VERSION: ${STUDIO_UID_VERSION}"
 	echo "STUDIO_WATCHDOG_VERSION: ${STUDIO_WATCHDOG_VERSION}"
 }
@@ -343,8 +345,7 @@ build_maven_install_skiptest bonita-connector-webservice 1.2.3
 
 detectStudioDependenciesVersions
 build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-1.0.8
+build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
 build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 
 build_maven_wrapper_verify_skiptest_with_profile bonita-studio mirrored,generate
