@@ -364,7 +364,6 @@ build_maven_wrapper_install_skiptest bonita-distrib
 # Connectors
 detectConnectorsVersions
 
-build_maven_wrapper_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
 build_maven_wrapper_install_skiptest bonita-connector-cmis ${CONNECTOR_VERSION_CMIS}
 build_maven_wrapper_install_skiptest bonita-connector-database ${CONNECTOR_VERSION_DATABASE}
 build_maven_wrapper_install_skiptest bonita-connector-email ${CONNECTOR_VERSION_EMAIL}
@@ -374,6 +373,7 @@ build_maven_wrapper_install_skiptest bonita-connector-scripting ${CONNECTOR_VERS
 build_maven_wrapper_install_skiptest bonita-connector-twitter ${CONNECTOR_VERSION_TWITTER}
 build_maven_wrapper_install_skiptest bonita-connector-webservice ${CONNECTOR_VERSION_WEBSERVICE}
 # connectors using legacy way of building
+build_maven_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
 build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}
 build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNECTOR_VERSION_LDAP}
 
