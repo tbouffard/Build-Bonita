@@ -252,9 +252,11 @@ detectStudioDependenciesVersions() {
 	echo "Detecting Studio dependencies versions"
 	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
 
+	STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION=`echo "${studioPom}" | grep image-overlay-plugin.version | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
 	STUDIO_UID_VERSION=`echo "${studioPom}" | grep ui.designer.version | sed 's@.*>\(.*\)<.*@\1@g'`
 	STUDIO_WATCHDOG_VERSION=`echo "${studioPom}" | grep watchdog.version | sed 's@.*>\(.*\)<.*@\1@g'`
 
+	echo "STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION: ${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}"
 	echo "STUDIO_UID_VERSION: ${STUDIO_UID_VERSION}"
 	echo "STUDIO_WATCHDOG_VERSION: ${STUDIO_WATCHDOG_VERSION}"
 }
@@ -295,6 +297,15 @@ detectConnectorsVersions() {
   CONNECTOR_VERSION_WEBSERVICE=`echo "${studioPom}" | grep connector.version.webservice | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
   echo "CONNECTOR_VERSION_WEBSERVICE: ${CONNECTOR_VERSION_WEBSERVICE}"
 }
+
+detectWebPagesDependenciesVersions() {
+	echo "Detecting web-pages dependencies versions"
+	local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_BPM_VERSION}/build.gradle`
+
+	WEB_PAGES_UID_VERSION=`echo "${webPagesGradleBuild}" | tr --squeeze-repeats "[:blank:]" | tr --delete "\n" | sed 's@.*UIDesigner {\(.*\)"}.*@\1@g' | sed 's@.*version "\(.*\)@\1@g'`
+	echo "WEB_PAGES_UID_VERSION: ${WEB_PAGES_UID_VERSION}"
+}
+
 
 ########################################################################################################################
 # MAIN
@@ -343,9 +354,8 @@ build_maven_wrapper_install_skiptest bonita-web
 build_maven_install_skiptest bonita-portal-js
 
 # bonita-web-pages is build using a specific version of UI Designer.
-# Version is defined in https://github.com/bonitasoft/bonita-web-pages/blob/$BONITA_BPM_VERSION/build.gradle
-build_maven_wrapper_install_skiptest bonita-ui-designer 1.9.53
-
+detectWebPagesDependenciesVersions
+build_maven_wrapper_install_skiptest bonita-ui-designer ${WEB_PAGES_UID_VERSION}
 build_gradle_wrapper_test_skip_publishToMavenLocal bonita-web-pages
 
 build_maven_wrapper_install_skiptest bonita-distrib
@@ -369,8 +379,7 @@ build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNE
 
 detectStudioDependenciesVersions
 build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
-# Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-1.0.8
+build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
 build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 
 build_maven_wrapper_verify_skiptest_with_profile bonita-studio mirrored,generate
