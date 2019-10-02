@@ -428,6 +428,4 @@ build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WAT
 build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
 build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 
-# TODO make this optional and only on Travis
-# see https://docs.travis-ci.com/user/common-build-problems/#build-times-out-because-no-output-was-received
-travis_wait 30 build_maven_wrapper_verify_skiptest_with_profile bonita-studio mirrored,generate
+build_maven_wrapper_verify_skiptest_with_profile bonita-studio mirrored,generate
