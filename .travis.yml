@@ -29,13 +29,9 @@ env:
 
 install: skip
 before_script:
-  - whoami
-  - pwd
+  # copy maven toolchains.xml configuration file
   - ls -lh $HOME/.m2
-  - cat $HOME/.m2/settings.xml
   - cp  .travis/maven/toolchains.xml $HOME/.m2/
-script:
   - ls -lh $HOME/.m2
-
 # see https://docs.travis-ci.com/user/common-build-problems/#build-times-out-because-no-output-was-received
-#script: travis_wait 75 ./build-script.sh
+script: travis_wait 75 ./build-script.sh
