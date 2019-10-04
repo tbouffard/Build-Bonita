@@ -29,11 +29,12 @@ env:
 
 install:
   - echo "PATH$ $PATH"
+  # on trusty, jvm are in /usr/lib/jvm/
   - echo "list jvm"; ls -lh /usr/local/lib/jvm/
   - echo "$HOME content"; ls -lh $HOME
-  # openjdk11 is not installed by default (only oracle jdk 11)
-  - $HOME/bin/install-jdk.sh --install openjdk11 --target $HOME/openjdk11
-  - $HOME/openjdk11/bin/java --version
+  # openjdk11 should be installed
+  # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
+  - /usr/local/lib/jvm/openjdk11/bin/java --version
 before_script:
   # copy maven toolchains.xml configuration file
   - ls -lh $HOME/.m2
