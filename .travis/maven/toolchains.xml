@@ -7,8 +7,7 @@
             <vendor>OpenJDK</vendor>
         </provides>
         <configuration>
-            <!-- not used here, only needed for Studio testing that are not run -->
-            <jdkHome>/does_not_exist</jdkHome>
+            <jdkHome>/home/travis/openjdk11</jdkHome>
         </configuration>
     </toolchain>
 </toolchains>
