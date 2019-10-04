@@ -28,10 +28,6 @@ env:
     - SCRIPT_BUILD_QUIET=true
 
 install:
-  - echo "PATH$ $PATH"
-  # on trusty, jvm are in /usr/lib/jvm/
-  - echo "list jvm"; ls -lh /usr/local/lib/jvm/
-  - echo "$HOME content"; ls -lh $HOME
   # openjdk11 should be installed
   # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
   - /usr/local/lib/jvm/openjdk11/bin/java --version
