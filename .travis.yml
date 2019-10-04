@@ -28,6 +28,7 @@ env:
     - SCRIPT_BUILD_QUIET=true
 
 install:
+  - echo "PATH$ $PATH"
   - echo "list jvm"; ls -lh /usr/local/lib/jvm/
   - echo "$HOME content"; ls -lh $HOME
   # openjdk11 is not installed by default (only oracle jdk 11)
