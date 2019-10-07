@@ -27,8 +27,12 @@ env:
     - SCRIPT_BUILD_NO_CLEAN=true
     - SCRIPT_BUILD_QUIET=true
 
+before_install:
+  - .travis/install-studio-packages.sh
 install:
-  - .travis/install-dependencies.sh
+  # openjdk11 should be installed
+  # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
+  - /usr/local/lib/jvm/openjdk11/bin/java --version
 before_script:
   # copy maven toolchains.xml configuration file
   - ls -lh $HOME/.m2
