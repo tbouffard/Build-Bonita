@@ -28,9 +28,7 @@ env:
     - SCRIPT_BUILD_QUIET=true
 
 install:
-  # openjdk11 should be installed
-  # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
-  - /usr/local/lib/jvm/openjdk11/bin/java --version
+  - .travis/install-dependencies.sh
 before_script:
   # copy maven toolchains.xml configuration file
   - ls -lh $HOME/.m2
