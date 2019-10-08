@@ -30,33 +30,6 @@ STUDIO_P2_URL=http://update-site.bonitasoft.com/p2/4.10
 # FIXME: remove when temporary workaround become useless
 STUDIO_P2_URL_INTERNAL_TO_REPLACE=http://repositories.rd.lan/p2/4.10.1
 
-# Test that x server is running. Required to generate Bonita Studio models
-# Can be ignored if Studio is build without the "generate" Maven profile
-# Warning: this requirement prevents to build on Travis CI
-if ! xset q &>/dev/null; then
-	echo "No X server at \$DISPLAY [$DISPLAY]" >&2
-	exit 1
-fi
-
-# Test that Maven exists
-# FIXME: remove once all projects includes Maven wrapper
-if hash mvn 2>/dev/null; then
-	MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
-	echo Using Maven version: "$MAVEN_VERSION"
-else
-	echo Maven not found. Exiting.
-	exit 1
-fi
-
-# Test if Curl exists
-if hash curl 2>/dev/null; then
-	CURL_VERSION="$(curl --version 2>&1  | awk -F " " 'NR==1 {print $2}')"
-	echo Using curl version: "$CURL_VERSION"
-else
-	echo curl not found. Exiting.
-	exit 1
-fi
-
 
 ########################################################################################################################
 # SCM AND BUILD FUNCTIONS
@@ -244,6 +217,34 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 # PARAMETERS PARSING AND VALIDATIONS
 ########################################################################################################################
 
+checkPrerequisites() {
+    # Test that x server is running. Required to generate Bonita Studio models
+    # Can be ignored if Studio is build without the "generate" Maven profile
+    # Warning: this requirement prevents to build on Travis CI
+    if ! xset q &>/dev/null; then
+        echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+        exit 1
+    fi
+
+    # Test that Maven exists
+    # FIXME: remove once all projects includes Maven wrapper
+    if hash mvn 2>/dev/null; then
+        MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
+        echo Using Maven version: "$MAVEN_VERSION"
+    else
+        echo Maven not found. Exiting.
+        exit 1
+    fi
+
+    # Test if Curl exists
+    if hash curl 2>/dev/null; then
+        CURL_VERSION="$(curl --version 2>&1  | awk -F " " 'NR==1 {print $2}')"
+        echo Using curl version: "$CURL_VERSION"
+    else
+        echo curl not found. Exiting.
+        exit 1
+    fi
+}
 
 
 ########################################################################################################################
@@ -312,6 +313,7 @@ detectWebPagesDependenciesVersions() {
 ########################################################################################################################
 # MAIN
 ########################################################################################################################
+checkPrerequisites
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build
 # Note that archived repositories are not listed here, as they are only required to build old Bonita versions
