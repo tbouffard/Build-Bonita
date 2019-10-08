@@ -27,8 +27,20 @@ env:
     - SCRIPT_BUILD_NO_CLEAN=true
     - SCRIPT_BUILD_QUIET=true
 
-before_install:
-  - .travis/install-studio-packages.sh
+#before_install:
+#  - .travis/install-studio-packages.sh
+addons:
+  apt:
+    packages:
+      - procps
+      - ratpoison
+      - xterm
+      - xfonts-base
+      - x11vnc
+      - gtk2.0
+      - build-essential
+      - libgtk2.0-dev
+      - libgtk-3-dev
 install:
   # openjdk11 should be installed
   # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
