@@ -47,6 +47,19 @@ This script has been tested with the following environment:
 - Oracle Java 1.8.0_221
 - openjdk 11.0.4 2019-07-16 (for the build of the Studio)
 
+CI Build
+----------------
+
+TODO usually badge are placed on top of the README
+
+![Travis CI](https://img.shields.io/travis/tbouffard/Build-Bonita/master?label=Travis%20build&logo=travis)
+
+[![Build Status](https://travis-ci.org/tbouffard/Build-Bonita.svg?branch=master)](https://travis-ci.org/tbouffard/Build-Bonita)
+
+A Travis CI build is configured to build this project, see https://travis-ci.org/tbouffard/Build-Bonita/ (TODO: link to
+be updated once integrated to the original repository)
+
+
 Issues
 ------
 
