@@ -244,6 +244,49 @@ checkPrerequisites() {
         echo curl not found. Exiting.
         exit 1
     fi
+
+    checkJavaVersion
+}
+
+checkJavaVersion() {
+    local JAVA_CMD=
+    echo "Check if Java version is compatible with Bonita"
+
+    if [[ "x$JAVA" = "x" ]]; then
+        if [[ "x$JAVA_HOME" != "x" ]]; then
+            echo "  > JAVA_HOME is set"
+            JAVA_CMD="$JAVA_HOME/bin/java"
+        else
+            echo "  > JAVA_HOME is not set. Use java in path"
+            JAVA_CMD="java"
+        fi
+    else
+        JAVA_CMD=$JAVA
+    fi
+    echo "  > Java command path is $JAVA_CMD"
+
+    java_full_version=$("$JAVA_CMD" -version 2>&1 | grep -i version | sed 's/.*version "\(.*\)".*$/\1/g')
+    echo "  > Java full version: $java_full_version"
+    if [[ "x$java_full_version" = "x" ]]; then
+      echo "No Java command could be found. Please set JAVA_HOME variable to a JDK and/or add the java executable to your PATH"
+      exit 1
+    fi
+
+    java_version_1st_digit=$(echo "$java_full_version" | sed 's/\(.*\)\..*\..*$/\1/g')
+    java_version_expected=8
+    # pre Java 9 versions, get minor version
+    if [[ "$java_version_1st_digit" -eq "1" ]]; then
+      java_version=$(echo "$java_full_version" | sed 's/.*\.\(.*\)\..*$/\1/g')
+    else
+      java_version=${java_version_1st_digit}
+    fi
+    echo "  > Java version: $java_version"
+
+    if [[ "$java_version" -ne "$java_version_expected" ]]; then
+      echo "Invalid Java version $java_version not $java_version_expected. Please set JAVA_HOME environment variable to a valid JDK version, and/or add the java executable to your PATH"
+      exit 1
+    fi
+    echo "Java version is compatible"
 }
 
 
