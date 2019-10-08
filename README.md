@@ -15,7 +15,7 @@ Requirements
 - Maven: 3.6.x
 - Java: Oracle/OpenJDK Java 8 (⚠ you cannot use Java 11 to build Bonita) and OpenJDK Java 11 (required to build Bonita Studio)
 - Maven Toolchains configuration file (`~/.m2/toolchains.xml`):
-  ```java
+  ```xml
   <?xml version="1.0" encoding="UTF8"?>
   <toolchains>
     <toolchain>
