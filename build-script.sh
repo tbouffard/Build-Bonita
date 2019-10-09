@@ -80,7 +80,7 @@ checkout() {
 	# The artifact include Ant Maven plugin to update the platform.target file but it is not executed before Tycho is executed and read the incorrect URL.
 	if [[ "$repository_name" == "bonita-studio" ]]; then
 		echo "WARN: workaround on $repository_name - fix platform.target URL"
-		sed -i "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
+		sed -i "" "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
 	fi
 }
 
@@ -241,6 +241,7 @@ checkPrerequisites() {
 		if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
             # Test that x server is running. Required to generate Bonita Studio models
             # Can be ignored if Studio is build without the "generate" Maven profile
+
             if ! xset q &>/dev/null; then
                 echo "No X server at \$DISPLAY [$DISPLAY]" >&2
                 exit 1
