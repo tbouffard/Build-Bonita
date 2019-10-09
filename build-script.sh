@@ -5,14 +5,8 @@ set -e
 set +o nounset
 
 
-# If you want to make 100% sure that you do a clean build from scratch:
-# rm -rf ~/.m2/repository/org/bonitasoft/
 # rm -rf ~/.m2/repository/.cache
 # rm -rf ~/.m2/repository/.meta
-# rm -rf ~/.gradle/caches
-# find -type d -name ".gradle" -prune -exec rm -rf {} \;
-# find -type d -name target -prune -exec rm -rf {} \;
-
 # Workaround for at least Debian Buster
 # Require to build bonita-portal-js due to issue with PhantomJS launched by Karma
 # See https://github.com/ariya/phantomjs/issues/14520
