@@ -381,7 +381,6 @@ detectWebPagesDependenciesVersions() {
 ########################################################################################################################
 logBuildSettings
 checkPrerequisites
-exit 12
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build
 # Note that archived repositories are not listed here, as they are only required to build old Bonita versions
