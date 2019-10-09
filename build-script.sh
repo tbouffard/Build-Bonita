@@ -223,32 +223,48 @@ logBuildSettings() {
     echo "  > BONITA_BUILD_STUDIO_SKIP: ${BONITA_BUILD_STUDIO_SKIP}"
 }
 
+OS_IS_LINUX=true
+
+detectOS() {
+    case "`uname`" in
+      CYGWIN*)  echo "Build is running on Windows/CYGWIN"; OS_IS_LINUX=false ;;
+      MINGW*)   echo "Build is running on Windows/MINGW"; OS_IS_LINUX=false;;
+      Darwin*)  echo "Build is running on Mac/Darwin"; OS_IS_LINUX=false;;
+      *)  echo "Build is running on Linux"; OS_IS_LINUX=true;;
+    esac
+}
+
 checkPrerequisites() {
-	if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
-        # Test that x server is running. Required to generate Bonita Studio models
-        # Can be ignored if Studio is build without the "generate" Maven profile
-        if ! xset q &>/dev/null; then
-            echo "No X server at \$DISPLAY [$DISPLAY]" >&2
-            exit 1
-        fi
-    fi
+    detectOS
+
+	if [[ "${OS_IS_LINUX}" == "true" ]]; then
+		if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
+            # Test that x server is running. Required to generate Bonita Studio models
+            # Can be ignored if Studio is build without the "generate" Maven profile
+            if ! xset q &>/dev/null; then
+                echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+                exit 1
+            fi
+            echo "  > X server running correctly"
+    	fi
+	fi
 
     # Test that Maven exists
     # FIXME: remove once all projects includes Maven wrapper
     if hash mvn 2>/dev/null; then
         MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
-        echo Using Maven version: "$MAVEN_VERSION"
+        echo "  > Using Maven version: $MAVEN_VERSION"
     else
-        echo Maven not found. Exiting.
+        echo "Maven not found. Exiting."
         exit 1
     fi
 
     # Test if Curl exists
     if hash curl 2>/dev/null; then
         CURL_VERSION="$(curl --version 2>&1  | awk -F " " 'NR==1 {print $2}')"
-        echo Using curl version: "$CURL_VERSION"
+        echo "  > Using curl version: $CURL_VERSION"
     else
-        echo curl not found. Exiting.
+        echo "curl not found. Exiting."
         exit 1
     fi
 
@@ -365,6 +381,7 @@ detectWebPagesDependenciesVersions() {
 ########################################################################################################################
 logBuildSettings
 checkPrerequisites
+exit 12
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build
 # Note that archived repositories are not listed here, as they are only required to build old Bonita versions
