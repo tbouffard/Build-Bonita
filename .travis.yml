@@ -3,6 +3,11 @@ jdk: openjdk8
 os: linux
 dist: xenial
 
+# for studio build
+# see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+services:
+  - xvfb
+
 before_cache:
   # Maven: ensure that we do not keep bonitasoft artifacts across builds
   - rm -rf $HOME/.m2/repository/org/bonitasoft
@@ -27,18 +32,18 @@ env:
     - SCRIPT_BUILD_NO_CLEAN=true
     - SCRIPT_BUILD_QUIET=true
 
-addons:
-  apt:
-    packages:
-      - procps
-      - ratpoison
-      - xterm
-      - xfonts-base
-      - x11vnc
-      - gtk2.0
-      - build-essential
-      - libgtk2.0-dev
-      - libgtk-3-dev
+#addons:
+#  apt:
+#    packages:
+#      - procps
+#      - ratpoison
+#      - xterm
+#      - xfonts-base
+#      - x11vnc
+#      - gtk2.0
+#      - build-essential
+#      - libgtk2.0-dev
+#      - libgtk-3-dev
 install:
   # openjdk11 should be installed
   # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
