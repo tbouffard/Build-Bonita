@@ -87,7 +87,7 @@ checkout() {
 }
 
 run_maven_with_standard_system_properties() {
-	build_command="$build_command -Dbonita.engine.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=${STUDIO_P2_URL}"
+	build_command="$build_command -Dengine.version=$BONITA_BPM_VERSION -Dfilters.version=$BONITA_BPM_VERSION"
 	echo "[DEBUG] Running build command: $build_command"
 	eval "$build_command"
 	# Go back to script folder (checkout move current directory to project checkout folder.
@@ -426,4 +426,4 @@ build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WAT
 build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
 build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 
-build_maven_wrapper_verify_skiptest_with_profile bonita-studio mirrored,generate
+build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,generate,all-in-one
