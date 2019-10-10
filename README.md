@@ -1,6 +1,9 @@
 Build Bonita from sources
 ================
 
+[![Linux build](https://img.shields.io/travis/Bonitasoft-Community/Build-Bonita/master?label=Linux%20build&logo=travis)](https://travis-ci.org/Bonitasoft-Community/Build-Bonita)
+
+
 The script to build Bonita Engine, Portal and Studio from official sources
 ------------------------------------------------------------------------------
 
@@ -46,6 +49,7 @@ This script has been tested with the following environment:
 - Maven 3.6.0
 - Oracle Java 1.8.0_221
 - openjdk 11.0.4 2019-07-16 (for the build of the Studio)
+
 
 Issues
 ------
