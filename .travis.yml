@@ -41,5 +41,6 @@ before_script:
   - ls -lh $HOME/.m2
   - cp  .travis/maven/toolchains.xml $HOME/.m2/
   - ls -lh $HOME/.m2
-# see https://docs.travis-ci.com/user/common-build-problems/#build-times-out-because-no-output-was-received
+# for 'travis_wait', see https://docs.travis-ci.com/user/common-build-problems/#build-times-out-because-no-output-was-received
+# needed because the Studio build lasts more than 10 minutes and do not log anything when quiet mode is used
 script: ./build-script.sh
