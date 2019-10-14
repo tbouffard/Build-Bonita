@@ -18,8 +18,10 @@ export OPENSSL_CONF=/etc/ssl
 
 # Script configuration
 # You can set the following environment variables
-SCRIPT_BUILD_NO_CLEAN=${SCRIPT_BUILD_NO_CLEAN:-false}
-SCRIPT_BUILD_QUIET=${SCRIPT_BUILD_QUIET:-false}
+BONITA_BUILD_NO_CLEAN=${BONITA_BUILD_NO_CLEAN:-false}
+BONITA_BUILD_QUIET=${BONITA_BUILD_QUIET:-false}
+BONITA_BUILD_STUDIO_ONLY=${BONITA_BUILD_STUDIO_ONLY:-false}
+BONITA_BUILD_STUDIO_SKIP=${BONITA_BUILD_STUDIO_SKIP:-false}
 
 # Bonita version
 BONITA_BPM_VERSION=7.9.4
@@ -115,7 +117,7 @@ build_gradle_wrapper() {
 }
 
 build_quiet_if_requested() {
-	if [[ "${SCRIPT_BUILD_QUIET}" == "true" ]]; then
+	if [[ "${BONITA_BUILD_QUIET}" == "true" ]]; then
 		echo "Configure quiet build"
 		build_command="$build_command --quiet"
 	fi
@@ -130,7 +132,7 @@ publishToMavenLocal() {
 }
 
 clean() {
-	if [[ "${SCRIPT_BUILD_NO_CLEAN}" == "true" ]]; then
+	if [[ "${BONITA_BUILD_NO_CLEAN}" == "true" ]]; then
 		echo "Configure build to skip clean task"
 	else
 		build_command="$build_command clean"
@@ -217,12 +219,22 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 # PARAMETERS PARSING AND VALIDATIONS
 ########################################################################################################################
 
+logBuildSettings() {
+    echo "Build settings"
+    echo "  > BONITA_BUILD_NO_CLEAN: ${BONITA_BUILD_NO_CLEAN}"
+    echo "  > BONITA_BUILD_QUIET: ${BONITA_BUILD_QUIET}"
+    echo "  > BONITA_BUILD_STUDIO_ONLY: ${BONITA_BUILD_STUDIO_ONLY}"
+    echo "  > BONITA_BUILD_STUDIO_SKIP: ${BONITA_BUILD_STUDIO_SKIP}"
+}
+
 checkPrerequisites() {
-    # Test that x server is running. Required to generate Bonita Studio models
-    # Can be ignored if Studio is build without the "generate" Maven profile
-    if ! xset q &>/dev/null; then
-        echo "No X server at \$DISPLAY [$DISPLAY]" >&2
-        exit 1
+	if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
+        # Test that x server is running. Required to generate Bonita Studio models
+        # Can be ignored if Studio is build without the "generate" Maven profile
+        if ! xset q &>/dev/null; then
+            echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+            exit 1
+        fi
     fi
 
     # Test that Maven exists
@@ -355,6 +367,7 @@ detectWebPagesDependenciesVersions() {
 ########################################################################################################################
 # MAIN
 ########################################################################################################################
+logBuildSettings
 checkPrerequisites
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build
@@ -388,42 +401,51 @@ checkPrerequisites
 # training-presentation-tool: fork of reveal.js with custom look and feel.
 # widget-builder: automatically downloaded in the build of bonita-ui-designer project.
 
-build_gradle_wrapper_test_skip_publishToMavenLocal bonita-engine
 
-build_maven_wrapper_install_skiptest bonita-userfilters
+if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
+    build_gradle_wrapper_test_skip_publishToMavenLocal bonita-engine
 
-build_maven_wrapper_install_skiptest bonita-web-extensions
+    build_maven_wrapper_install_skiptest bonita-userfilters
 
-build_maven_wrapper_install_skiptest bonita-web
-# TODO with Bonita 7.10, we should be able to use the maven wrapper
-build_maven_install_skiptest bonita-portal-js
+    build_maven_wrapper_install_skiptest bonita-web-extensions
 
-# bonita-web-pages is build using a specific version of UI Designer.
-detectWebPagesDependenciesVersions
-build_maven_wrapper_install_skiptest bonita-ui-designer ${WEB_PAGES_UID_VERSION}
-build_gradle_wrapper_test_skip_publishToMavenLocal bonita-web-pages
+    build_maven_wrapper_install_skiptest bonita-web
+    # TODO with Bonita 7.10, we should be able to use the maven wrapper
+    build_maven_install_skiptest bonita-portal-js
 
-build_maven_wrapper_install_skiptest bonita-distrib
+    # bonita-web-pages is build using a specific version of UI Designer.
+    detectWebPagesDependenciesVersions
+    build_maven_wrapper_install_skiptest bonita-ui-designer ${WEB_PAGES_UID_VERSION}
+    build_gradle_wrapper_test_skip_publishToMavenLocal bonita-web-pages
 
-# Connectors
-detectConnectorsVersions
+    build_maven_wrapper_install_skiptest bonita-distrib
 
-build_maven_wrapper_install_skiptest bonita-connector-cmis ${CONNECTOR_VERSION_CMIS}
-build_maven_wrapper_install_skiptest bonita-connector-database ${CONNECTOR_VERSION_DATABASE}
-build_maven_wrapper_install_skiptest bonita-connector-email ${CONNECTOR_VERSION_EMAIL}
-build_maven_wrapper_install_skiptest bonita-connector-rest ${CONNECTOR_VERSION_REST}
-build_maven_wrapper_install_skiptest bonita-connector-salesforce ${CONNECTOR_VERSION_SALESFORCE}
-build_maven_wrapper_install_skiptest bonita-connector-scripting ${CONNECTOR_VERSION_SCRIPTING}
-build_maven_wrapper_install_skiptest bonita-connector-twitter ${CONNECTOR_VERSION_TWITTER}
-build_maven_wrapper_install_skiptest bonita-connector-webservice ${CONNECTOR_VERSION_WEBSERVICE}
-# connectors using legacy way of building
-build_maven_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
-build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}
-build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNECTOR_VERSION_LDAP}
+    # Connectors
+    detectConnectorsVersions
 
-detectStudioDependenciesVersions
-build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
-build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
-build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
+    build_maven_wrapper_install_skiptest bonita-connector-cmis ${CONNECTOR_VERSION_CMIS}
+    build_maven_wrapper_install_skiptest bonita-connector-database ${CONNECTOR_VERSION_DATABASE}
+    build_maven_wrapper_install_skiptest bonita-connector-email ${CONNECTOR_VERSION_EMAIL}
+    build_maven_wrapper_install_skiptest bonita-connector-rest ${CONNECTOR_VERSION_REST}
+    build_maven_wrapper_install_skiptest bonita-connector-salesforce ${CONNECTOR_VERSION_SALESFORCE}
+    build_maven_wrapper_install_skiptest bonita-connector-scripting ${CONNECTOR_VERSION_SCRIPTING}
+    build_maven_wrapper_install_skiptest bonita-connector-twitter ${CONNECTOR_VERSION_TWITTER}
+    build_maven_wrapper_install_skiptest bonita-connector-webservice ${CONNECTOR_VERSION_WEBSERVICE}
+    # connectors using legacy way of building
+    build_maven_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
+    build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}
+    build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNECTOR_VERSION_LDAP}
 
-build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,generate,all-in-one
+    detectStudioDependenciesVersions
+    build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
+    build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
+    build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
+else
+    echo "Skipping all build prior the Studio part"
+fi
+
+if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
+    build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,generate,all-in-one
+else
+    echo "Skipping the Studio build"
+fi
