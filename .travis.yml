@@ -42,4 +42,4 @@ before_script:
   - cp  .travis/maven/toolchains.xml $HOME/.m2/
   - ls -lh $HOME/.m2
 # see https://docs.travis-ci.com/user/common-build-problems/#build-times-out-because-no-output-was-received
-script: travis_wait 75 ./build-script.sh
+script: ./build-script.sh
