@@ -43,4 +43,5 @@ before_script:
   - ls -lh $HOME/.m2
 # for 'travis_wait', see https://docs.travis-ci.com/user/common-build-problems/#build-times-out-because-no-output-was-received
 # needed because the Studio build lasts more than 10 minutes and do not log anything when quiet mode is used
+# about build timeouts, see https://docs.travis-ci.com/user/customizing-the-build/#build-timeouts
 script: ./build-script.sh
