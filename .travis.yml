@@ -3,10 +3,10 @@ jdk: openjdk8
 os: linux
 dist: xenial
 
-## for studio build
-## see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
-#services:
-#  - xvfb
+# for studio build
+# see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+services:
+  - xvfb
 
 #before_cache:
 #  # Maven: ensure that we do not keep bonitasoft artifacts across builds
@@ -56,9 +56,6 @@ jobs:
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
       script: ./build-script.sh
     - stage: build studio
-      # see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
-      services:
-        - xvfb
       env:
         - BONITA_BUILD_STUDIO_ONLY=true
         - BONITA_BUILD_QUIET=false
