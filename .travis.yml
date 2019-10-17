@@ -54,7 +54,6 @@ jobs:
         - ls -lh $HOME/.m2
         - ls -lh $HOME/.m2/repository
         - ls -lh $HOME/.m2/repository/org
-        - set
     - stage: build studio
       env:
         - BONITA_BUILD_STUDIO_ONLY=true
@@ -65,4 +64,3 @@ jobs:
         - ls -lh $HOME/.m2
         - ls -lh $HOME/.m2/repository
         - ls -lh $HOME/.m2/repository/org
-        - set
