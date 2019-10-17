@@ -18,8 +18,8 @@ export OPENSSL_CONF=/etc/ssl
 
 # Script configuration
 # You can set the following environment variables
-SCRIPT_BUILD_NO_CLEAN=${SCRIPT_BUILD_NO_CLEAN:-false}
-SCRIPT_BUILD_QUIET=${SCRIPT_BUILD_QUIET:-false}
+BONITA_BUILD_NO_CLEAN=${BONITA_BUILD_NO_CLEAN:-false}
+BONITA_BUILD_QUIET=${BONITA_BUILD_QUIET:-false}
 BONITA_BUILD_STUDIO_ONLY=${BONITA_BUILD_STUDIO_ONLY:-false}
 BONITA_BUILD_STUDIO_SKIP=${BONITA_BUILD_STUDIO_SKIP:-false}
 
@@ -117,7 +117,7 @@ build_gradle_wrapper() {
 }
 
 build_quiet_if_requested() {
-	if [[ "${SCRIPT_BUILD_QUIET}" == "true" ]]; then
+	if [[ "${BONITA_BUILD_QUIET}" == "true" ]]; then
 		echo "Configure quiet build"
 		build_command="$build_command --quiet"
 	fi
@@ -132,7 +132,7 @@ publishToMavenLocal() {
 }
 
 clean() {
-	if [[ "${SCRIPT_BUILD_NO_CLEAN}" == "true" ]]; then
+	if [[ "${BONITA_BUILD_NO_CLEAN}" == "true" ]]; then
 		echo "Configure build to skip clean task"
 	else
 		build_command="$build_command clean"
