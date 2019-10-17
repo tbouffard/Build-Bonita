@@ -22,6 +22,7 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+
 branches:
   only:
   - master
@@ -50,7 +51,10 @@ jobs:
 #      script: ./build-script.sh
       script:
         - echo "simulate build without studio"
+        - ls -lh $HOME/.m2
+        - ls -lh $HOME/.m2/repository
         - ls -lh $HOME/.m2/repository/org
+        - set
     - stage: build studio
       env:
         - BONITA_BUILD_STUDIO_ONLY=true
@@ -58,4 +62,7 @@ jobs:
 #      script: ./build-script.sh
       script:
         - echo "simulate build without studio"
+        - ls -lh $HOME/.m2
+        - ls -lh $HOME/.m2/repository
         - ls -lh $HOME/.m2/repository/org
+        - set
