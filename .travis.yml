@@ -3,10 +3,10 @@ jdk: openjdk8
 os: linux
 dist: xenial
 
-# for studio build
-# see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
-services:
-  - xvfb
+## for studio build
+## see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+#services:
+#  - xvfb
 
 before_cache:
   # Maven: ensure that we do not keep bonitasoft artifacts across builds
@@ -32,15 +32,15 @@ env:
   global:
     - BONITA_BUILD_NO_CLEAN=true
 
-install:
-  # openjdk11 should be installed
-  # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
-  - /usr/local/lib/jvm/openjdk11/bin/java --version
-before_script:
-  # copy maven toolchains.xml configuration file
-  - ls -lh $HOME/.m2
-  - cp  .travis/maven/toolchains.xml $HOME/.m2/
-  - ls -lh $HOME/.m2
+#install:
+#  # openjdk11 should be installed
+#  # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
+#  - /usr/local/lib/jvm/openjdk11/bin/java --version
+#before_script:
+#  # copy maven toolchains.xml configuration file
+#  - ls -lh $HOME/.m2
+#  - cp  .travis/maven/toolchains.xml $HOME/.m2/
+#  - ls -lh $HOME/.m2
 
 jobs:
   include:
@@ -52,12 +52,24 @@ jobs:
       script:
         - echo "simulate build without studio"
         - ls -lh $HOME/.m2
-        - ls -lh $HOME/.m2/repository
-        - ls -lh $HOME/.m2/repository/org
+#        - ls -lh $HOME/.m2/repository
+#        - ls -lh $HOME/.m2/repository/org
     - stage: build studio
+      # see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+      services:
+        - xvfb
       env:
         - BONITA_BUILD_STUDIO_ONLY=true
         - BONITA_BUILD_QUIET=false
+      install:
+        # openjdk11 should be installed
+        # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
+        - /usr/local/lib/jvm/openjdk11/bin/java --version
+      before_script:
+        # copy maven toolchains.xml configuration file
+        - ls -lh $HOME/.m2
+        - cp  .travis/maven/toolchains.xml $HOME/.m2/
+        - ls -lh $HOME/.m2
 #      script: ./build-script.sh
       script:
         - echo "simulate build without studio"
