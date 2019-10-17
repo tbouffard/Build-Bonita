@@ -31,7 +31,6 @@ branches:
 env:
   global:
     - BONITA_BUILD_NO_CLEAN=true
-    - BONITA_BUILD_QUIET=true
 
 install:
   # openjdk11 should be installed
@@ -47,6 +46,7 @@ jobs:
   include:
     - stage: build without studio
       env:
+        - BONITA_BUILD_QUIET=true
         - BONITA_BUILD_STUDIO_SKIP=true
 #      script: ./build-script.sh
       script:
