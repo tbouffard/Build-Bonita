@@ -45,9 +45,9 @@ env:
 jobs:
   include:
     - stage: build without studio
-      env:
-        - BONITA_BUILD_QUIET=true
-        - BONITA_BUILD_STUDIO_SKIP=true
+#      env:
+#        - BONITA_BUILD_QUIET=true
+#        - BONITA_BUILD_STUDIO_SKIP=true
       before_cache:
         # Maven: ensure that we do not keep bonitasoft artifacts across builds
         # temp bonita dependencies must be available for studio
@@ -58,16 +58,21 @@ jobs:
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
       before_script:
         - ls -lh $HOME/.m2
-        - cat $HOME/.m2/settings.xml
+        # do not declare environment variables in the env section to ensure the cache is shared by jobs
+        # see https://docs.travis-ci.com/user/caching/#caches-and-build-matrices
+        - export BONITA_BUILD_QUIET=true
+        - export BONITA_BUILD_STUDIO_SKIP=true
       script: ./build-script.sh
     - stage: build studio
-      env:
-        - BONITA_BUILD_QUIET=false
-        - BONITA_BUILD_STUDIO_ONLY=true
+#      env:
+#        - BONITA_BUILD_QUIET=false
+#        - BONITA_BUILD_STUDIO_ONLY=true
       install:
         # openjdk11 should be installed
         # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
         - /usr/local/lib/jvm/openjdk11/bin/java --version
+        - export BONITA_BUILD_QUIET=false
+        - export BONITA_BUILD_STUDIO_ONLY=true
       before_script:
         # copy maven toolchains.xml configuration file
         - ls -lh $HOME/.m2
