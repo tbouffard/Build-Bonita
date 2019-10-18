@@ -50,15 +50,20 @@ jobs:
         - BONITA_BUILD_STUDIO_SKIP=true
       before_cache:
         # Maven: ensure that we do not keep bonitasoft artifacts across builds
-        - rm -rf $HOME/.m2/repository/org/bonitasoft
+        # temp bonita dependencies must be available for studio
+        #TODO store them in the cache but remove them prior building (in the before_script phase)
+        #- rm -rf $HOME/.m2/repository/org/bonitasoft
         # Gradle: see https://docs.travis-ci.com/user/languages/java/#projects-using-gradle
         - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      before_script:
+        - ls -lh $HOME/.m2
+        - cat $HOME/.m2/settings.xml
       script: ./build-script.sh
     - stage: build studio
       env:
-        - BONITA_BUILD_STUDIO_ONLY=true
         - BONITA_BUILD_QUIET=false
+        - BONITA_BUILD_STUDIO_ONLY=true
       install:
         # openjdk11 should be installed
         # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
