@@ -219,6 +219,14 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 # PARAMETERS PARSING AND VALIDATIONS
 ########################################################################################################################
 
+logBuildSettings() {
+    echo "Build settings"
+    echo "  > BONITA_BUILD_NO_CLEAN: ${BONITA_BUILD_NO_CLEAN}"
+    echo "  > BONITA_BUILD_QUIET: ${BONITA_BUILD_QUIET}"
+    echo "  > BONITA_BUILD_STUDIO_ONLY: ${BONITA_BUILD_STUDIO_ONLY}"
+    echo "  > BONITA_BUILD_STUDIO_SKIP: ${BONITA_BUILD_STUDIO_SKIP}"
+}
+
 checkPrerequisites() {
     # Test that x server is running. Required to generate Bonita Studio models
     # Can be ignored if Studio is build without the "generate" Maven profile
@@ -357,6 +365,7 @@ detectWebPagesDependenciesVersions() {
 ########################################################################################################################
 # MAIN
 ########################################################################################################################
+logBuildSettings
 checkPrerequisites
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build
