@@ -50,6 +50,9 @@ jobs:
         - /usr/local/lib/jvm/openjdk11/bin/java --version
         - export BONITA_BUILD_QUIET=false
         - export BONITA_BUILD_STUDIO_ONLY=true
+        before_cache:
+        # remove studio-only configuration
+        - rm -f  $HOME/.m2/toolchains.xml
       before_script:
         # copy maven toolchains.xml configuration file
         - ls -lh $HOME/.m2
