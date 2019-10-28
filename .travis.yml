@@ -39,10 +39,10 @@ jobs:
         - export BONITA_BUILD_STUDIO_SKIP=true
       script: ./build-script.sh
     - stage: build studio
-    # see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
-    services:
-      - xvfb
-    install:
+      # see https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+      services:
+        - xvfb
+      install:
         # openjdk11 should be installed
         # https://docs.travis-ci.com/user/reference/xenial/#jvm-clojure-groovy-java-scala-support
         - /usr/local/lib/jvm/openjdk11/bin/java --version
