@@ -87,7 +87,7 @@ checkout() {
 }
 
 run_maven_with_standard_system_properties() {
-	build_command="$build_command -Dengine.version=$BONITA_BPM_VERSION -Dfilters.version=$BONITA_BPM_VERSION"
+	build_command="$build_command -Dengine.version=$BONITA_BPM_VERSION -Dfilters.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=${STUDIO_P2_URL}"
 	echo "[DEBUG] Running build command: $build_command"
 	eval "$build_command"
 	# Go back to script folder (checkout move current directory to project checkout folder.
