@@ -52,8 +52,6 @@ jobs:
         # remove studio-only configuration
         - rm -f  $HOME/.m2/toolchains.xml
       before_script:
-        # copy maven toolchains.xml configuration file
-        - ls -lh $HOME/.m2
-        - cp  .travis/maven/toolchains.xml $HOME/.m2/
-        - ls -lh $HOME/.m2
+        # studio-only configuration
+        - cp .travis/maven/toolchains.xml $HOME/.m2/
       script: ./build-script.sh
