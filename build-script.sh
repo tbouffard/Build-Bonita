@@ -228,11 +228,13 @@ logBuildSettings() {
 }
 
 checkPrerequisites() {
-    # Test that x server is running. Required to generate Bonita Studio models
-    # Can be ignored if Studio is build without the "generate" Maven profile
-    if ! xset q &>/dev/null; then
-        echo "No X server at \$DISPLAY [$DISPLAY]" >&2
-        exit 1
+	if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
+        # Test that x server is running. Required to generate Bonita Studio models
+        # Can be ignored if Studio is build without the "generate" Maven profile
+        if ! xset q &>/dev/null; then
+            echo "No X server at \$DISPLAY [$DISPLAY]" >&2
+            exit 1
+        fi
     fi
 
     # Test that Maven exists
