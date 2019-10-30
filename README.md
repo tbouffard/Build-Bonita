@@ -16,24 +16,8 @@ Requirements
 - Disk space: around 15 GB free space. Around 4 GB of dependencies will be downloaded (sources, Maven dependencies, ...). A fast internet connection is recommended.
 - OS: Linux. This script is designed for Linux Operating System. You are of course free to fork it for Windows or Mac.
 - Maven: 3.6.x
-- Java: Oracle/OpenJDK Java 8 (⚠ you cannot use Java 11 to build Bonita) and OpenJDK Java 11 (required to build Bonita Studio)
-- Maven Toolchains configuration file (`~/.m2/toolchains.xml`):
-  ```xml
-  <?xml version="1.0" encoding="UTF8"?>
-  <toolchains>
-    <toolchain>
-      <type>jdk</type>
-      <provides>
-        <version>11</version>
-        <vendor>OpenJDK</vendor>
-      </provides>
-      <configuration>
-        <!-- Set the appropriate path to your OpenJDK 11 installation folder -->
-        <jdkHome>/usr/lib/jvm/java-11-openjdk-amd64</jdkHome>
-      </configuration>
-    </toolchain> 
-  </toolchains>
-  ```
+- Java: Oracle/OpenJDK Java 8 (⚠ you cannot use Java 11 to build Bonita)
+
 
 Instructions
 ------------
@@ -41,15 +25,20 @@ Instructions
 1. Run `bash build-script.sh` in a terminal
 1. Once finished, you will find a working build of Bonita in: `bonita-studio/all-in-one/target`.
 
+**Notes**
+- no tests are run by the script (at least no backend tests)
+- the script does not produce Studio installers
+
+
 Test environment
 ----------------
 
-This script has been tested with the following environment:
+This script has been manually tested with the following environment:
 - Debian GNU/Linux Buster
 - Maven 3.6.0
 - Oracle Java 1.8.0_221
-- openjdk 11.0.4 2019-07-16 (for the build of the Studio)
 
+In addition, a Travis CI Ubuntu Xenial build runs on master branch push and PR creation/update
 
 Issues
 ------
