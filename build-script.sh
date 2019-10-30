@@ -445,7 +445,7 @@ else
 fi
 
 if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
-    build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,generate,all-in-one
+    build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,generate,all-in-one,!jdk11-tests
 else
     echo "Skipping the Studio build"
 fi
