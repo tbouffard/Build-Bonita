@@ -7,6 +7,8 @@ set +o nounset
 
 # If you want to make 100% sure that you do a clean build from scratch:
 # rm -rf ~/.m2/repository/org/bonitasoft/
+# rm -rf ~/.m2/repository/.cache
+# rm -rf ~/.m2/repository/.meta
 # rm -rf ~/.gradle/caches
 # find -type d -name ".gradle" -prune -exec rm -rf {} \;
 # find -type d -name target -prune -exec rm -rf {} \;
@@ -445,7 +447,7 @@ else
 fi
 
 if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
-    build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,generate,all-in-one,!jdk11-tests
+    build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,all-in-one,!jdk11-tests
 else
     echo "Skipping the Studio build"
 fi
