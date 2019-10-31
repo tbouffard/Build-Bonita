@@ -21,7 +21,11 @@ Requirements
 
 Instructions
 ------------
-1. Place this script in an empty folder
+1. Clone this repository
+1. Checkout the tag/branch related to the Bonita version you want to build
+    1. build from the `master` branch which contains latest build improvements for the latest Bonita version available
+    1. alternatively, you can checkout a tag, if you want to build past version for instance
+    1. if you want to give a try to the development version of Bonita, build from the `dev` branch
 1. Run `bash build-script.sh` in a terminal
 1. Once finished, you will find a working build of Bonita in: `bonita-studio/all-in-one/target`.
 
