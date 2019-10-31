@@ -33,6 +33,15 @@ BONITA_VERSION=7.10.0.beta-01
 # SCM AND BUILD FUNCTIONS
 ########################################################################################################################
 
+# $1: the message to be displayed as header
+echoHeaders() {
+    echo
+    echo
+	echo "============================================================"
+	echo "$1"
+	echo "============================================================"
+}
+
 # params:
 # - Git repository name
 # - Tag name (optional)
@@ -52,9 +61,7 @@ checkout() {
 		# If we don't have a tag name assume that the tag is named with the Bonita version
 		tag_name=$BONITA_VERSION
 	fi
-	echo "============================================================"
-	echo "Processing ${repository_name} ${tag_name}"
-	echo "============================================================"
+	echoHeaders "Processing ${repository_name} ${tag_name}"
 
 	if [ "$#" -eq 3 ]; then
 		checkout_folder_name="$3"
@@ -293,7 +300,7 @@ checkJavaVersion() {
 ########################################################################################################################
 
 detectStudioDependenciesVersions() {
-	echo "Detecting Studio dependencies versions"
+	echoHeaders "Detecting Studio dependencies versions"
 	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_VERSION}/pom.xml`
 
 	STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION=`echo "${studioPom}" | grep image-overlay-plugin.version | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
@@ -304,8 +311,9 @@ detectStudioDependenciesVersions() {
 }
 
 detectConnectorsVersions() {
-  echo "Detecting Connectors versions"
+  echoHeaders "Detecting Connectors versions"
   local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
+
   CONNECTOR_VERSION_ALFRESCO=`echo "${studioPom}" | grep connector.version.alfresco | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
   echo "CONNECTOR_VERSION_ALFRESCO: ${CONNECTOR_VERSION_ALFRESCO}"
 
@@ -341,7 +349,7 @@ detectConnectorsVersions() {
 }
 
 detectWebPagesDependenciesVersions() {
-	echo "Detecting web-pages dependencies versions"
+	echoHeaders "Detecting web-pages dependencies versions"
 	local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_VERSION}/build.gradle`
 
 	WEB_PAGES_UID_VERSION=`echo "${webPagesGradleBuild}" | tr --squeeze-repeats "[:blank:]" | tr --delete "\n" | sed 's@.*UIDesigner {\(.*\)"}.*@\1@g' | sed 's@.*version "\(.*\)@\1@g'`
@@ -425,11 +433,11 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
     build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
 else
-    echo "Skipping all build prior the Studio part"
+    echoHeaders "Skipping all build prior the Studio part"
 fi
 
 if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
     build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,all-in-one,!jdk11-tests
 else
-    echo "Skipping the Studio build"
+    echoHeaders "Skipping the Studio build"
 fi
