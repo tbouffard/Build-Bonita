@@ -329,40 +329,40 @@ detectStudioDependenciesVersions() {
 }
 
 detectConnectorsVersions() {
-  echo "Detecting Connectors versions"
-  local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
-  CONNECTOR_VERSION_ALFRESCO=`echo "${studioPom}" | grep connector.version.alfresco | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_ALFRESCO: ${CONNECTOR_VERSION_ALFRESCO}"
+    echo "Detecting Connectors versions"
+    local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
+    CONNECTOR_VERSION_ALFRESCO=`echo "${studioPom}" | grep connector.version.alfresco | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_ALFRESCO: ${CONNECTOR_VERSION_ALFRESCO}"
 
-  CONNECTOR_VERSION_CMIS=`echo "${studioPom}" | grep connector.version.cmis | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_CMIS: ${CONNECTOR_VERSION_CMIS}"
+    CONNECTOR_VERSION_CMIS=`echo "${studioPom}" | grep connector.version.cmis | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_CMIS: ${CONNECTOR_VERSION_CMIS}"
 
-  CONNECTOR_VERSION_DATABASE=`echo "${studioPom}" | grep connector.version.database | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_DATABASE: ${CONNECTOR_VERSION_DATABASE}"
+    CONNECTOR_VERSION_DATABASE=`echo "${studioPom}" | grep connector.version.database | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_DATABASE: ${CONNECTOR_VERSION_DATABASE}"
 
-  CONNECTOR_VERSION_EMAIL=`echo "${studioPom}" | grep connector.version.email | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_EMAIL: ${CONNECTOR_VERSION_EMAIL}"
+    CONNECTOR_VERSION_EMAIL=`echo "${studioPom}" | grep connector.version.email | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_EMAIL: ${CONNECTOR_VERSION_EMAIL}"
 
-  CONNECTOR_VERSION_GOOGLE_CALENDAR_V3=`echo "${studioPom}" | grep google-calendar-v3 | grep -v '<version>' | grep -v 'impl' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_GOOGLE_CALENDAR_V3: ${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}"
+    CONNECTOR_VERSION_GOOGLE_CALENDAR_V3=`echo "${studioPom}" | grep google-calendar-v3 | grep -v '<version>' | grep -v 'impl' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_GOOGLE_CALENDAR_V3: ${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}"
 
-  CONNECTOR_VERSION_LDAP=`echo "${studioPom}" | grep connector.version.ldap | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_LDAP: ${CONNECTOR_VERSION_LDAP}"
+    CONNECTOR_VERSION_LDAP=`echo "${studioPom}" | grep connector.version.ldap | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_LDAP: ${CONNECTOR_VERSION_LDAP}"
 
-  CONNECTOR_VERSION_REST=`echo "${studioPom}" | grep connector.version.rest | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_REST: ${CONNECTOR_VERSION_REST}"
+    CONNECTOR_VERSION_REST=`echo "${studioPom}" | grep connector.version.rest | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_REST: ${CONNECTOR_VERSION_REST}"
 
-  CONNECTOR_VERSION_SALESFORCE=`echo "${studioPom}" | grep connector.version.salesforce | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_SALESFORCE: ${CONNECTOR_VERSION_SALESFORCE}"
+    CONNECTOR_VERSION_SALESFORCE=`echo "${studioPom}" | grep connector.version.salesforce | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_SALESFORCE: ${CONNECTOR_VERSION_SALESFORCE}"
 
-  CONNECTOR_VERSION_SCRIPTING=`echo "${studioPom}" | grep connector.version.scripting | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_SCRIPTING: ${CONNECTOR_VERSION_SCRIPTING}"
+    CONNECTOR_VERSION_SCRIPTING=`echo "${studioPom}" | grep connector.version.scripting | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_SCRIPTING: ${CONNECTOR_VERSION_SCRIPTING}"
 
-  CONNECTOR_VERSION_TWITTER=`echo "${studioPom}" | grep connector.version.twitter | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_TWITTER: ${CONNECTOR_VERSION_TWITTER}"
+    CONNECTOR_VERSION_TWITTER=`echo "${studioPom}" | grep connector.version.twitter | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_TWITTER: ${CONNECTOR_VERSION_TWITTER}"
 
-  CONNECTOR_VERSION_WEBSERVICE=`echo "${studioPom}" | grep connector.version.webservice | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
-  echo "CONNECTOR_VERSION_WEBSERVICE: ${CONNECTOR_VERSION_WEBSERVICE}"
+    CONNECTOR_VERSION_WEBSERVICE=`echo "${studioPom}" | grep connector.version.webservice | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
+    echo "CONNECTOR_VERSION_WEBSERVICE: ${CONNECTOR_VERSION_WEBSERVICE}"
 }
 
 detectWebPagesDependenciesVersions() {
