@@ -25,8 +25,8 @@ Instructions
 1. Place this script in an empty folder
 1. Run `bash build-script.sh` in a terminal
 1. Once finished, the following binaries are available
-  - studio: `bonita-studio/all-in-one/target` (only zip archive, no installer)
-  - tomcat bundle: `bonita-distrib/bundle/tomcat/target`
+    1. studio: `bonita-studio/all-in-one/target` (only zip archive, no installer)
+    1. tomcat bundle: `bonita-distrib/bundle/tomcat/target`
 
 **Notes**
 - If you want to make 100% sure that you do a clean build from scratch, run the following commands:
