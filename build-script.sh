@@ -26,7 +26,7 @@ BONITA_BUILD_STUDIO_ONLY=${BONITA_BUILD_STUDIO_ONLY:-false}
 BONITA_BUILD_STUDIO_SKIP=${BONITA_BUILD_STUDIO_SKIP:-false}
 
 # Bonita version
-BONITA_BPM_VERSION=7.9.4
+BONITA_VERSION=7.9.4
 
 # Bonita Studio p2 public repository
 STUDIO_P2_URL=http://update-site.bonitasoft.com/p2/4.10
@@ -56,7 +56,7 @@ checkout() {
 		tag_name="$2"
 	else
 		# If we don't have a tag name assume that the tag is named with the Bonita version
-		tag_name=$BONITA_BPM_VERSION
+		tag_name=$BONITA_VERSION
 	fi
 	echo "============================================================"
 	echo "Processing ${repository_name} ${tag_name}"
@@ -91,7 +91,7 @@ checkout() {
 }
 
 run_maven_with_standard_system_properties() {
-	build_command="$build_command -Dengine.version=$BONITA_BPM_VERSION -Dfilters.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=${STUDIO_P2_URL}"
+	build_command="$build_command -Dengine.version=$BONITA_VERSION -Dfilters.version=$BONITA_VERSION -Dp2MirrorUrl=${STUDIO_P2_URL}"
 	echo "[DEBUG] Running build command: $build_command"
 	eval "$build_command"
 	# Go back to script folder (checkout move current directory to project checkout folder.
@@ -309,7 +309,7 @@ checkJavaVersion() {
 
 detectStudioDependenciesVersions() {
 	echo "Detecting Studio dependencies versions"
-	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
+	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_VERSION}/pom.xml`
 
 	STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION=`echo "${studioPom}" | grep image-overlay-plugin.version | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
 	STUDIO_UID_VERSION=`echo "${studioPom}" | grep ui.designer.version | sed 's@.*>\(.*\)<.*@\1@g'`
@@ -322,7 +322,7 @@ detectStudioDependenciesVersions() {
 
 detectConnectorsVersions() {
   echo "Detecting Connectors versions"
-  local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
+  local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
   CONNECTOR_VERSION_ALFRESCO=`echo "${studioPom}" | grep connector.version.alfresco | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
   echo "CONNECTOR_VERSION_ALFRESCO: ${CONNECTOR_VERSION_ALFRESCO}"
 
@@ -359,7 +359,7 @@ detectConnectorsVersions() {
 
 detectWebPagesDependenciesVersions() {
 	echo "Detecting web-pages dependencies versions"
-	local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_BPM_VERSION}/build.gradle`
+	local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_VERSION}/build.gradle`
 
 	WEB_PAGES_UID_VERSION=`echo "${webPagesGradleBuild}" | tr --squeeze-repeats "[:blank:]" | tr --delete "\n" | sed 's@.*UIDesigner {\(.*\)"}.*@\1@g' | sed 's@.*version "\(.*\)@\1@g'`
 	echo "WEB_PAGES_UID_VERSION: ${WEB_PAGES_UID_VERSION}"
