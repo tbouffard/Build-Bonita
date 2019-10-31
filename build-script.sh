@@ -77,7 +77,7 @@ checkout() {
     # The artifact include Ant Maven plugin to update the platform.target file but it is not executed before Tycho is executed and read the incorrect URL.
     if [[ "$repository_name" == "bonita-studio" ]]; then
         echo "WARN: workaround on $repository_name - fix platform.target URL"
-        sed -i "" "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
+        sed -i.bak "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
     fi
 }
 
