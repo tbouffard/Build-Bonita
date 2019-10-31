@@ -432,6 +432,7 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     detectStudioDependenciesVersions
     build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
     build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
+    build_maven_wrapper_install_skiptest bonita-data-repository
 else
     echoHeaders "Skipping all build prior the Studio part"
 fi
