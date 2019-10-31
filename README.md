@@ -14,9 +14,9 @@ Requirements
 ------------
 
 - Disk space: around 15 GB free space. Around 4 GB of dependencies will be downloaded (sources, Maven dependencies, ...). A fast internet connection is recommended.
-- OS: This script is designed for Linux Operating System. It is not regularly tested on Windows or Mac but should work on these OS.
-- Maven: 3.6.x
-- Java: Oracle/OpenJDK Java 8 (⚠ you cannot use Java 11 to build Bonita)
+- OS: this script is designed for Linux Operating System. It is not regularly tested on Windows or Mac but should work on these OS.
+- Maven: 3.6.x.
+- Java: Oracle/OpenJDK Java 8 (⚠ you cannot use Java 11 to build Bonita).
 
 
 
@@ -32,6 +32,8 @@ Instructions
 - If you want to make 100% sure that you do a clean build from scratch, run the following commands:
 ```bash
 rm -rf ~/.m2/repository/org/bonitasoft/
+rm -rf ~/.m2/repository/.cache
+rm -rf ~/.m2/repository/.meta
 rm -rf ~/.gradle/caches
 find -type d -name ".gradle" -prune -exec rm -rf {} \;
 find -type d -name target -prune -exec rm -rf {} \;
@@ -39,8 +41,8 @@ find -type d -name target -prune -exec rm -rf {} \;
 
 
 **Notes**
-- no tests are run by the script (at least no backend tests)
-- the script does not produce Studio installers
+- No tests are run by the script (at least no back end tests).
+- The script does not produce Studio installers (required license for proprietary software).
 
 
 Test environment
