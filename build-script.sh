@@ -26,13 +26,7 @@ BONITA_BUILD_STUDIO_ONLY=${BONITA_BUILD_STUDIO_ONLY:-false}
 BONITA_BUILD_STUDIO_SKIP=${BONITA_BUILD_STUDIO_SKIP:-false}
 
 # Bonita version
-BONITA_VERSION=7.9.4
-
-# Bonita Studio p2 public repository
-STUDIO_P2_URL=http://update-site.bonitasoft.com/p2/4.10
-
-# FIXME: remove when temporary workaround become useless
-STUDIO_P2_URL_INTERNAL_TO_REPLACE=http://repositories.rd.lan/p2/4.10.1
+BONITA_VERSION=7.10.0.beta-01
 
 
 ########################################################################################################################
@@ -79,19 +73,10 @@ checkout() {
 
 	# Move to the repository clone folder (required to run Maven/Gradle wrapper)
 	cd $checkout_folder_name
-
-	# Workarounds
-	# FIXME: remove temporary workaround added to make sure that we use public repository (Bonita internal tracker issue id: BST-463)
-	# Issue is related to Tycho target-platform-configuration plugin that rely on the artifact org.bonitasoft.studio:platform.
-	# The artifact include Ant Maven plugin to update the platform.target file but it is not executed before Tycho is executed and read the incorrect URL.
-	if [[ "$repository_name" == "bonita-studio" ]]; then
-		echo "WARN: workaround on $repository_name - fix platform.target URL"
-		sed -i "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
-	fi
 }
 
 run_maven_with_standard_system_properties() {
-	build_command="$build_command -Dengine.version=$BONITA_VERSION -Dfilters.version=$BONITA_VERSION -Dp2MirrorUrl=${STUDIO_P2_URL}"
+	build_command="$build_command -Dengine.version=$BONITA_VERSION -Dfilters.version=$BONITA_VERSION"
 	echo "[DEBUG] Running build command: $build_command"
 	eval "$build_command"
 	# Go back to script folder (checkout move current directory to project checkout folder.
@@ -412,8 +397,7 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     build_maven_wrapper_install_skiptest bonita-web-extensions
 
     build_maven_wrapper_install_skiptest bonita-web
-    # TODO with Bonita 7.10, we should be able to use the maven wrapper
-    build_maven_install_skiptest bonita-portal-js
+    build_maven_wrapper_install_skiptest bonita-portal-js
 
     # bonita-web-pages is build using a specific version of UI Designer.
     detectWebPagesDependenciesVersions
