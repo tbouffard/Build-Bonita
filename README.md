@@ -3,6 +3,8 @@ Build Bonita from sources
 
 [![Linux build](https://img.shields.io/travis/Bonitasoft-Community/Build-Bonita/master?label=Linux%20build&logo=travis)](https://travis-ci.org/Bonitasoft-Community/Build-Bonita)
 
+[![MacOS and Windows build](https://github.com/Bonitasoft-Community/Build-Bonita/workflows/MacOS%20and%20Windows%20Build/badge.svg)](https://github.com/Bonitasoft-Community/Build-Bonita/actions)
+
 
 Overview
 ------------------------------------------------------------------------------
@@ -14,7 +16,7 @@ Requirements
 ------------
 
 - Disk space: around 15 GB free space. Around 4 GB of dependencies will be downloaded (sources, Maven dependencies, ...). A fast internet connection is recommended.
-- OS: this script is designed for Linux Operating System. It is not regularly tested on Windows or Mac but should work on these OS.
+- OS: Linux, MacOS and Windows (see test environments list below)
 - Maven: 3.6.x.
 - Java: Oracle/OpenJDK Java 8 (⚠ you cannot use Java 11 to build Bonita).
 
@@ -23,7 +25,7 @@ Requirements
 Instructions
 ------------
 1. Place this script in an empty folder
-1. Run `bash build-script.sh` in a terminal
+1. Run `bash build-script.sh` in a terminal (on Windows, use git-bash as terminal i.e. the bash shell included with Git for Windows)
 1. Once finished, the following binaries are available
     1. studio: `bonita-studio/all-in-one/target` (only zip archive, no installer)
     1. tomcat bundle: `bonita-distrib/bundle/tomcat/target`
@@ -45,7 +47,7 @@ find -type d -name target -prune -exec rm -rf {} \;
 - The script does not produce Studio installers (required license for proprietary software).
 
 
-Test environment
+Test environments
 ----------------
 
 This script has been manually tested with the following environment:
@@ -54,7 +56,11 @@ This script has been manually tested with the following environment:
 - Oracle Java 1.8.0_221
 
 
-In addition, a Travis CI Ubuntu Xenial build runs on master branch push and PR creation/update
+In addition, CI builds are run on master/dev branch push and Pull Requests (see badges on top of this page)
+- Linux: Ubuntu Xenial (Travis CI)
+- MacOS: Catalina (Github Action)
+- Windows: Windows Server 2019 Datacenter (Github Action)
+
 
 Issues
 ------
