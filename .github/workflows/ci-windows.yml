@@ -22,4 +22,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build
-      run: bash build-script.sh
+      shell: bash
+      run: ./build-script.sh
+# TODO give a try to the upload-artifact actions to store bundle and Studio
+# see https://github.com/actions/upload-artifact
