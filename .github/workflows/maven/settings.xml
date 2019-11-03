@@ -8,14 +8,14 @@
         <mirror>
             <id>google-maven-central</id>
             <name>Google Maven Central</name>
-            <url>https://maven-central.storage.googleapis.com</url>
+            <url>https://maven-central.storage-download.googleapis.com/repos/central/data</url>
             <mirrorOf>central</mirrorOf>
         </mirror>
         <!-- seems required in github action for Windows -->
         <mirror>
             <id>mirror-unknown-bonita-web-declared-repositories</id>
             <name>Maven Central to replace wrongly declared repositories in bonita-web</name>
-            <url>https://maven-central.storage.googleapis.com</url>
+            <url>https://maven-central.storage-download.googleapis.com/repos/central/data</url>
             <!-- IMPORTANT: do not put spaces after comma otherwise repository is not considered -->
             <mirrorOf>gwt-maven-plugins-nexus,oauth</mirrorOf>
         </mirror>
