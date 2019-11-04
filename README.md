@@ -23,7 +23,7 @@ Requirements
 Instructions
 ------------
 1. Place this script in an empty folder
-1. Run `bash build-script.sh` in a terminal
+1. Run `bash build-script.sh` in a terminal (on Windows, use git-bash as terminal i.e. the bash shell included with Git for Windows)
 1. Once finished, the following binaries are available
     1. studio: `bonita-studio/all-in-one/target` (only zip archive, no installer)
     1. tomcat bundle: `bonita-distrib/bundle/tomcat/target`
