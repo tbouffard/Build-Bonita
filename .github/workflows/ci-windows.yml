@@ -1,14 +1,8 @@
 name: Windows Build
 
-on:
-  # TODO remove duplication, we should be able to do on: [push, pull_request]
-  # see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#on
-  push:
-    branches:
-    - master
-    - dev
-  pull_request:
-    branches:
+# see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#on
+on: [push, pull_request]
+  branches:
     - master
     - dev
 
