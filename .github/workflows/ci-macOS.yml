@@ -27,7 +27,27 @@ jobs:
         ls -lah $HOME/.m2/
         cp $GITHUB_WORKSPACE/.github/workflows/maven/settings.xml $HOME/.m2/
         ls -lh $HOME/.m2/
-    - name: Build
+    - name: Build without Studio
       shell: bash
       run: ./build-script.sh
-#      run: echo "skipped for now, as we know it is working"
+      env:
+        BONITA_BUILD_STUDIO_SKIP: true
+    - name: Prepare Bonita bundle for upload
+      shell: bash
+      run: |
+        mkdir -p artifacts/bundle
+        cp bonita-distrib/bundle/tomcat/target/*.zip artifacts/bundle/
+        ls -lh artifacts/bundle/
+    - name: Upload Bonita bundle
+      uses: actions/upload-artifact@master
+      with:
+        name: bonita-bundle
+        path: artifacts/bundle/
+# TODO restore Studio build
+#    - name: Build Studio
+#      shell: bash
+#      run: ./build-script.sh
+#      env:
+#        BONITA_BUILD_STUDIO_ONLY: true
+# TODO upload Studio if possible
+# from bonita-studio/all-in-one/target
