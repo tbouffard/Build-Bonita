@@ -212,28 +212,50 @@ build_gradle_wrapper_test_skip_publishToMavenLocal() {
 # PARAMETERS PARSING AND VALIDATIONS
 ########################################################################################################################
 
-logBuildSettings() {
+OS_IS_LINUX=false
+OS_IS_MAC=false
+OS_IS_WINDOWS=false
+
+detectOS() {
+    case "`uname`" in
+      CYGWIN*)  OS_IS_WINDOWS=true;;
+      MINGW*)   OS_IS_WINDOWS=true;;
+      Darwin*)  OS_IS_MAC=true;;
+      *)        OS_IS_LINUX=true;;
+    esac
+}
+
+logBuildInfo() {
+    echo "OS information"
+    if [[ "${OS_IS_LINUX}" == "true" ]]; then
+        echo "  > Run on Linux"
+        echo "$(cat /etc/lsb-release)"
+    elif [[ "${OS_IS_MAC}" == "true" ]]; then
+        echo "  > Run on MacOS"
+        echo "$(sw_vers)"
+    elif [[ "${OS_IS_WINDOWS}" == "true" ]]; then
+        echo "  > Run on Windows"
+        echo "  > Details: $(wmic os get Caption,Version,osarchitecture | grep Microsoft)"
+    else
+        echo "/!\ unable to find the OS type"
+        exit 1
+    fi
+    echo "  > Generic information: $(uname -a)"
+
+    echo "Build environment"
+    echo "  > Use $(git --version)"
+    echo "  > Commit: $(git rev-parse FETCH_HEAD)"
+
     echo "Build settings"
+    echo "  > BONITA_BPM_VERSION: ${BONITA_BPM_VERSION}"
     echo "  > BONITA_BUILD_NO_CLEAN: ${BONITA_BUILD_NO_CLEAN}"
     echo "  > BONITA_BUILD_QUIET: ${BONITA_BUILD_QUIET}"
     echo "  > BONITA_BUILD_STUDIO_ONLY: ${BONITA_BUILD_STUDIO_ONLY}"
     echo "  > BONITA_BUILD_STUDIO_SKIP: ${BONITA_BUILD_STUDIO_SKIP}"
 }
 
-OS_IS_LINUX=true
-
-detectOS() {
-    case "`uname`" in
-      CYGWIN*)  echo "Build is running on Windows/CYGWIN"; OS_IS_LINUX=false ;;
-      MINGW*)   echo "Build is running on Windows/MINGW"; OS_IS_LINUX=false;;
-      Darwin*)  echo "Build is running on Mac/Darwin"; OS_IS_LINUX=false;;
-      *)  echo "Build is running on Linux"; OS_IS_LINUX=true;;
-    esac
-}
-
 checkPrerequisites() {
-    detectOS
-
+    echo "Prerequisites"
     if [[ "${OS_IS_LINUX}" == "true" ]]; then
         if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
             # Test that x server is running. Required to generate Bonita Studio models
@@ -251,7 +273,7 @@ checkPrerequisites() {
     # FIXME: remove once all projects includes Maven wrapper
     if hash mvn 2>/dev/null; then
         MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
-        echo "  > Using Maven version: $MAVEN_VERSION"
+        echo "  > Use Maven version: $MAVEN_VERSION"
     else
         echo "Maven not found. Exiting."
         exit 1
@@ -260,7 +282,7 @@ checkPrerequisites() {
     # Test if Curl exists
     if hash curl 2>/dev/null; then
         CURL_VERSION="$(curl --version 2>&1  | awk -F " " 'NR==1 {print $2}')"
-        echo "  > Using curl version: $CURL_VERSION"
+        echo "  > Use curl version: $CURL_VERSION"
     else
         echo "curl not found. Exiting."
         exit 1
@@ -377,8 +399,10 @@ detectWebPagesDependenciesVersions() {
 ########################################################################################################################
 # MAIN
 ########################################################################################################################
-logBuildSettings
+detectOS
+logBuildInfo
 checkPrerequisites
+echo
 
 # List of repositories on https://github.com/bonitasoft that you don't need to build
 # Note that archived repositories are not listed here, as they are only required to build old Bonita versions
