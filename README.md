@@ -30,7 +30,7 @@ Instructions
 1. Run `bash build-script.sh` in a terminal
 1. Once finished, the following binaries are available
     1. studio: `bonita-studio/all-in-one/target` (only zip archive, no installer)
-    1. tomcat bundle: `bonita-distrib/bundle/tomcat/target`
+    1. tomcat bundle: `bonita-distrib/tomcat/target`
 
 **Notes**
 - If you want to make 100% sure that you do a clean build from scratch, run the following commands:
@@ -58,7 +58,7 @@ This script has been manually tested with the following environment:
 - Oracle Java 1.8.0_221
 
 
-In addition, a Travis CI Ubuntu Xenial build runs on master branch push and PR creation/update
+In addition, a Travis CI Ubuntu Xenial build runs on master/dev branches push and PR creation/update
 
 Issues
 ------

@@ -71,15 +71,6 @@ checkout() {
 
     # Move to the repository clone folder (required to run Maven/Gradle wrapper)
     cd $checkout_folder_name
-
-	# Workarounds
-	# FIXME: remove temporary workaround added to make sure that we use public repository (Bonita internal tracker issue id: BST-463)
-	# Issue is related to Tycho target-platform-configuration plugin that rely on the artifact org.bonitasoft.studio:platform.
-	# The artifact include Ant Maven plugin to update the platform.target file but it is not executed before Tycho is executed and read the incorrect URL.
-	if [[ "$repository_name" == "bonita-studio" ]]; then
-		echo "WARN: workaround on $repository_name - fix platform.target URL"
-		sed -i "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
-	fi
 }
 
 run_maven_with_standard_system_properties() {
@@ -245,7 +236,7 @@ logBuildInfo() {
     echo "  > Commit: $(git rev-parse FETCH_HEAD)"
 
     echo "Build settings"
-    echo "  > BONITA_BPM_VERSION: ${BONITA_BPM_VERSION}"
+    echo "  > BONITA_VERSION: ${BONITA_VERSION}"
     echo "  > BONITA_BUILD_NO_CLEAN: ${BONITA_BUILD_NO_CLEAN}"
     echo "  > BONITA_BUILD_QUIET: ${BONITA_BUILD_QUIET}"
     echo "  > BONITA_BUILD_STUDIO_ONLY: ${BONITA_BUILD_STUDIO_ONLY}"
