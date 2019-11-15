@@ -43,7 +43,8 @@ jobs:
       # see https://help.github.com/en/github/automating-your-workflow-with-github-actions/persisting-workflow-data-using-artifacts and https://github.com/actions/upload-artifact
       uses: actions/upload-artifact@master
       with:
-        name: bonita-bundle
+        # see https://github.community/t5/GitHub-Actions/Use-variables-in-upload-artifact/m-p/34778#M2009
+        name: bonita-bundle-windows-build-${{github.sha}}
         path: artifacts/bundle/
     - name: Build Studio
       shell: bash
@@ -61,5 +62,5 @@ jobs:
       # see https://github.com/actions/upload-artifact
       uses: actions/upload-artifact@master
       with:
-        name: bonita-studio
+        name: bonita-studio-windows-build-${{github.sha}}
         path: artifacts/studio/

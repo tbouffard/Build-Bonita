@@ -43,7 +43,7 @@ jobs:
       # see https://github.com/actions/upload-artifact
       uses: actions/upload-artifact@master
       with:
-        name: bonita-bundle
+        name: bonita-bundle-macos-build-${{github.sha}}
         path: artifacts/bundle/
     - name: Build Studio
       shell: bash
@@ -61,5 +61,5 @@ jobs:
       # see https://github.com/actions/upload-artifact
       uses: actions/upload-artifact@master
       with:
-        name: bonita-studio
+        name: bonita-studio-macos-build-${{github.sha}}
         path: artifacts/studio/
