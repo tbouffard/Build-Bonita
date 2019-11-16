@@ -1,4 +1,4 @@
-name: Windows Build
+name: MacOS and Windows Build
 
 on:
   push:
@@ -12,7 +12,13 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os.name }}
+    strategy:
+      matrix:
+        # syntax inspired from https://github.community/t5/GitHub-Actions/Using-a-matrix-defined-input-for-a-custom-action/m-p/32032/highlight/true#M988
+        os:
+          - {name: macos-latest, short: "macos" }
+          - {name: windows-latest, short: "windows" }
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK 1.8
@@ -32,7 +38,7 @@ jobs:
       env:
         BONITA_BUILD_QUIET: true
         BONITA_BUILD_STUDIO_SKIP: true
-    # TODO see if we can create an action that will hide this
+    # TODO see if we can create an action for bundle/studio artifact preparation and upload
     - name: Prepare Bonita bundle for upload
       shell: bash
       run: |
@@ -44,7 +50,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         # see https://github.community/t5/GitHub-Actions/Use-variables-in-upload-artifact/m-p/34778#M2009
-        name: bonita-bundle-windows-build-${{github.sha}}
+        name: bonita-bundle-${{matrix.os.short}}-build-${{github.sha}}
         path: artifacts/bundle/
     - name: Build Studio
       shell: bash
@@ -62,5 +68,5 @@ jobs:
       # see https://github.com/actions/upload-artifact
       uses: actions/upload-artifact@master
       with:
-        name: bonita-studio-windows-build-${{github.sha}}
+        name: bonita-studio-${{matrix.os.short}}-build-${{github.sha}}
         path: artifacts/studio/
