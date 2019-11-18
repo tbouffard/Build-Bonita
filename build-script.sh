@@ -17,7 +17,7 @@ BONITA_BUILD_STUDIO_ONLY=${BONITA_BUILD_STUDIO_ONLY:-false}
 BONITA_BUILD_STUDIO_SKIP=${BONITA_BUILD_STUDIO_SKIP:-false}
 
 # Bonita version
-BONITA_VERSION=7.10.0.beta-01
+BONITA_VERSION=7.10.0.rc-01
 
 
 ########################################################################################################################
@@ -453,6 +453,7 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     build_maven_wrapper_install_skiptest bonita-connector-cmis ${CONNECTOR_VERSION_CMIS}
     build_maven_wrapper_install_skiptest bonita-connector-database ${CONNECTOR_VERSION_DATABASE}
     build_maven_wrapper_install_skiptest bonita-connector-email ${CONNECTOR_VERSION_EMAIL}
+    build_maven_wrapper_install_skiptest bonita-connector-ldap ${CONNECTOR_VERSION_LDAP}
     build_maven_wrapper_install_skiptest bonita-connector-rest ${CONNECTOR_VERSION_REST}
     build_maven_wrapper_install_skiptest bonita-connector-salesforce ${CONNECTOR_VERSION_SALESFORCE}
     build_maven_wrapper_install_skiptest bonita-connector-scripting ${CONNECTOR_VERSION_SCRIPTING}
@@ -461,7 +462,6 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     # connectors using legacy way of building
     build_maven_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
     build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}
-    build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNECTOR_VERSION_LDAP}
 
     detectStudioDependenciesVersions
     build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
