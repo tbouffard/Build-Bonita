@@ -17,18 +17,21 @@ BONITA_BUILD_STUDIO_ONLY=${BONITA_BUILD_STUDIO_ONLY:-false}
 BONITA_BUILD_STUDIO_SKIP=${BONITA_BUILD_STUDIO_SKIP:-false}
 
 # Bonita version
-BONITA_BPM_VERSION=7.9.4
-
-# Bonita Studio p2 public repository
-STUDIO_P2_URL=http://update-site.bonitasoft.com/p2/4.10
-
-# FIXME: remove when temporary workaround become useless
-STUDIO_P2_URL_INTERNAL_TO_REPLACE=http://repositories.rd.lan/p2/4.10.1
+BONITA_VERSION=7.10.0
 
 
 ########################################################################################################################
 # SCM AND BUILD FUNCTIONS
 ########################################################################################################################
+
+# $1: the message to be displayed as header
+echoHeaders() {
+    echo
+    echo
+	echo "============================================================"
+	echo "$1"
+	echo "============================================================"
+}
 
 # params:
 # - Git repository name
@@ -47,11 +50,9 @@ checkout() {
         tag_name="$2"
     else
         # If we don't have a tag name assume that the tag is named with the Bonita version
-        tag_name=$BONITA_BPM_VERSION
+		tag_name=$BONITA_VERSION
     fi
-    echo "============================================================"
-    echo "Processing ${repository_name} ${tag_name}"
-    echo "============================================================"
+	echoHeaders "Processing ${repository_name} ${tag_name}"
 
     if [ "$#" -eq 3 ]; then
         checkout_folder_name="$3"
@@ -70,19 +71,10 @@ checkout() {
 
     # Move to the repository clone folder (required to run Maven/Gradle wrapper)
     cd $checkout_folder_name
-
-    # Workarounds
-    # FIXME: remove temporary workaround added to make sure that we use public repository (Bonita internal tracker issue id: BST-463)
-    # Issue is related to Tycho target-platform-configuration plugin that rely on the artifact org.bonitasoft.studio:platform.
-    # The artifact include Ant Maven plugin to update the platform.target file but it is not executed before Tycho is executed and read the incorrect URL.
-    if [[ "$repository_name" == "bonita-studio" ]]; then
-        echo "WARN: workaround on $repository_name - fix platform.target URL"
-        sed -i.bak "s,${STUDIO_P2_URL_INTERNAL_TO_REPLACE},${STUDIO_P2_URL},g" platform/platform.target
-    fi
 }
 
 run_maven_with_standard_system_properties() {
-    build_command="$build_command -Dengine.version=$BONITA_BPM_VERSION -Dfilters.version=$BONITA_BPM_VERSION -Dp2MirrorUrl=${STUDIO_P2_URL}"
+	build_command="$build_command -Dengine.version=$BONITA_VERSION -Dfilters.version=$BONITA_VERSION"
     echo "[DEBUG] Running build command: $build_command"
     eval "$build_command"
     # Go back to script folder (checkout move current directory to project checkout folder.
@@ -244,7 +236,7 @@ logBuildInfo() {
     echo "  > Commit: $(git rev-parse FETCH_HEAD)"
 
     echo "Build settings"
-    echo "  > BONITA_BPM_VERSION: ${BONITA_BPM_VERSION}"
+    echo "  > BONITA_VERSION: ${BONITA_VERSION}"
     echo "  > BONITA_BUILD_NO_CLEAN: ${BONITA_BUILD_NO_CLEAN}"
     echo "  > BONITA_BUILD_QUIET: ${BONITA_BUILD_QUIET}"
     echo "  > BONITA_BUILD_STUDIO_ONLY: ${BONITA_BUILD_STUDIO_ONLY}"
@@ -340,21 +332,20 @@ checkJavaVersion() {
 ########################################################################################################################
 
 detectStudioDependenciesVersions() {
-    echo "Detecting Studio dependencies versions"
-    local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/pom.xml`
+	echoHeaders "Detecting Studio dependencies versions"
+	local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_VERSION}/pom.xml`
 
     STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION=`echo "${studioPom}" | grep image-overlay-plugin.version | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
     STUDIO_UID_VERSION=`echo "${studioPom}" | grep ui.designer.version | sed 's@.*>\(.*\)<.*@\1@g'`
-    STUDIO_WATCHDOG_VERSION=`echo "${studioPom}" | grep watchdog.version | sed 's@.*>\(.*\)<.*@\1@g'`
 
     echo "STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION: ${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}"
     echo "STUDIO_UID_VERSION: ${STUDIO_UID_VERSION}"
-    echo "STUDIO_WATCHDOG_VERSION: ${STUDIO_WATCHDOG_VERSION}"
 }
 
 detectConnectorsVersions() {
-    echo "Detecting Connectors versions"
-    local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_BPM_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
+  echoHeaders "Detecting Connectors versions"
+  local studioPom=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-studio/${BONITA_VERSION}/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml`
+
     CONNECTOR_VERSION_ALFRESCO=`echo "${studioPom}" | grep connector.version.alfresco | grep -v '<version>' | sed 's@.*>\(.*\)<.*@\1@g'`
     echo "CONNECTOR_VERSION_ALFRESCO: ${CONNECTOR_VERSION_ALFRESCO}"
 
@@ -390,8 +381,8 @@ detectConnectorsVersions() {
 }
 
 detectWebPagesDependenciesVersions() {
-    echo "Detecting web-pages dependencies versions"
-    local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_BPM_VERSION}/build.gradle`
+	echoHeaders "Detecting web-pages dependencies versions"
+	local webPagesGradleBuild=`curl -sS -X GET https://raw.githubusercontent.com/bonitasoft/bonita-web-pages/${BONITA_VERSION}/build.gradle`
 
     WEB_PAGES_UID_VERSION=`echo "${webPagesGradleBuild}" | tr -s "[:blank:]" | tr -d "\n" | sed 's@.*UIDesigner {\(.*\)"}.*@\1@g' | sed 's@.*version "\(.*\)@\1@g'`
     echo "WEB_PAGES_UID_VERSION: ${WEB_PAGES_UID_VERSION}"
@@ -436,6 +427,7 @@ echo
 # swt-repo: legacy repository required by Bonita Studio. Deprecated.
 # training-presentation-tool: fork of reveal.js with custom look and feel.
 # widget-builder: automatically downloaded in the build of bonita-ui-designer project.
+# bonita-studio-watchdog: obsolete since 7.10 (included in bonita-studio).
 
 
 if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
@@ -446,8 +438,7 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     build_maven_wrapper_install_skiptest bonita-web-extensions
 
     build_maven_wrapper_install_skiptest bonita-web
-    # TODO with Bonita 7.10, we should be able to use the maven wrapper
-    build_maven_install_skiptest bonita-portal-js
+    build_maven_wrapper_install_skiptest bonita-portal-js
 
     # bonita-web-pages is build using a specific version of UI Designer.
     detectWebPagesDependenciesVersions
@@ -462,6 +453,7 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     build_maven_wrapper_install_skiptest bonita-connector-cmis ${CONNECTOR_VERSION_CMIS}
     build_maven_wrapper_install_skiptest bonita-connector-database ${CONNECTOR_VERSION_DATABASE}
     build_maven_wrapper_install_skiptest bonita-connector-email ${CONNECTOR_VERSION_EMAIL}
+    build_maven_wrapper_install_skiptest bonita-connector-ldap ${CONNECTOR_VERSION_LDAP}
     build_maven_wrapper_install_skiptest bonita-connector-rest ${CONNECTOR_VERSION_REST}
     build_maven_wrapper_install_skiptest bonita-connector-salesforce ${CONNECTOR_VERSION_SALESFORCE}
     build_maven_wrapper_install_skiptest bonita-connector-scripting ${CONNECTOR_VERSION_SCRIPTING}
@@ -470,18 +462,17 @@ if [[ "${BONITA_BUILD_STUDIO_ONLY}" == "false" ]]; then
     # connectors using legacy way of building
     build_maven_install_skiptest bonita-connector-alfresco ${CONNECTOR_VERSION_ALFRESCO}
     build_maven_install_skiptest bonita-connector-googlecalendar-V3 bonita-connector-google-calendar-v3-${CONNECTOR_VERSION_GOOGLE_CALENDAR_V3}
-    build_maven_install_skiptest bonita-connector-ldap bonita-connector-ldap-${CONNECTOR_VERSION_LDAP}
 
     detectStudioDependenciesVersions
-    build_maven_install_skiptest bonita-studio-watchdog studio-watchdog-${STUDIO_WATCHDOG_VERSION}
     build_maven_wrapper_install_skiptest image-overlay-plugin image-overlay-plugin-${STUDIO_IMAGE_OVERLAY_PLUGIN_VERSION}
     build_maven_wrapper_install_skiptest bonita-ui-designer ${STUDIO_UID_VERSION}
+    build_maven_wrapper_install_skiptest bonita-data-repository
 else
-    echo "Skipping all build prior the Studio part"
+    echoHeaders "Skipping all build prior the Studio part"
 fi
 
 if [[ "${BONITA_BUILD_STUDIO_SKIP}" == "false" ]]; then
     build_maven_wrapper_verify_skiptest_with_profile bonita-studio default,all-in-one,!jdk11-tests
 else
-    echo "Skipping the Studio build"
+    echoHeaders "Skipping the Studio build"
 fi

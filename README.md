@@ -24,11 +24,15 @@ Requirements
 
 Instructions
 ------------
-1. Place this script in an empty folder
+1. Clone this repository
+1. Checkout the tag/branch related to the Bonita version you want to build
+    1. build from the `master` branch which contains latest build improvements for the latest Bonita version available
+    1. alternatively, you can checkout a tag, if you want to build past version for instance
+    1. if you want to give a try to the development version of Bonita, build from the `dev` branch
 1. Run `bash build-script.sh` in a terminal (on Windows, use git-bash as terminal i.e. the bash shell included with Git for Windows)
 1. Once finished, the following binaries are available
     1. studio: `bonita-studio/all-in-one/target` (only zip archive, no installer)
-    1. tomcat bundle: `bonita-distrib/bundle/tomcat/target`
+    1. tomcat bundle: `bonita-distrib/tomcat/target`
 
 **Notes**
 - If you want to make 100% sure that you do a clean build from scratch, run the following commands:
@@ -58,8 +62,8 @@ This script has been manually tested with the following environment:
 
 In addition, CI builds are run on master/dev branch push and Pull Requests (see badges on top of this page)
 - Linux: Ubuntu Xenial (Travis CI)
-- MacOS: Catalina (Github Action)
-- Windows: Windows Server 2019 Datacenter (Github Action)
+- MacOS: Catalina (Github Actions)
+- Windows: Windows Server 2019 Datacenter (Github Actions)
 
 
 Issues
